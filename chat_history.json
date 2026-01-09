@@ -1,0 +1,50 @@
+[
+  {
+    "role": "user",
+    "content": "halo"
+  },
+  {
+    "role": "assistant",
+    "content": "halo juga\n"
+  },
+  {
+    "role": "user",
+    "content": "😊"
+  },
+  {
+    "role": "assistant",
+    "content": "kenapa sih\n"
+  },
+  {
+    "role": "user",
+    "content": "hmm"
+  },
+  {
+    "role": "assistant",
+    "content": "kenapa emang\n"
+  },
+  {
+    "role": "user",
+    "content": "gatau"
+  },
+  {
+    "role": "assistant",
+    "content": "yaudah sih\n"
+  },
+  {
+    "role": "user",
+    "content": "lah"
+  },
+  {
+    "role": "assistant",
+    "content": "kenapa lagi\n"
+  },
+  {
+    "role": "user",
+    "content": "fk u"
+  },
+  {
+    "role": "assistant",
+    "content": "santai elah\n"
+  }
+]
