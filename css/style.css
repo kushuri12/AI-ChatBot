@@ -347,3 +347,69 @@ input {
     opacity: 1;
   }
 }
+
+/* Voice Toggle Button */
+.voice-toggle-btn {
+  width: 36px;
+  height: 36px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #999;
+  position: relative;
+}
+
+.voice-toggle-btn:hover {
+  background: #fee2e8;
+  color: var(--primary);
+  transform: scale(1.05);
+}
+
+/* Voice OFF state - show X icon */
+.voice-toggle-btn .volume-on {
+  display: none;
+}
+
+.voice-toggle-btn .volume-x {
+  display: block;
+  stroke: #999;
+}
+
+/* Voice ON state - show  volume icon */
+.voice-toggle-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+.voice-toggle-btn.active .volume-x {
+  display: none;
+}
+
+.voice-toggle-btn.active .volume-on {
+  display: block;
+  stroke: white;
+}
+
+.voice-toggle-btn.active:hover {
+  background: var(--primary-hover);
+}
+
+/* Pulse animation when speaking */
+@keyframes voicePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 133, 162, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 133, 162, 0);
+  }
+}
+
+.voice-toggle-btn.speaking {
+  animation: voicePulse 1s infinite;
+}

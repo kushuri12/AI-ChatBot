@@ -40,6 +40,114 @@ const stickerBtn = document.getElementById("stickerBtn");
 const stickerModal = document.getElementById("stickerModal");
 const closeStickerBtn = document.getElementById("closeStickerBtn");
 const stickerGrid = document.getElementById("stickerGrid");
+const voiceToggleBtn = document.getElementById("voiceToggleBtn");
+
+// ========== VOICE/AUDIO SYSTEM ==========
+// Initialize Speech Synthesis (built-in browser TTS)
+const synth = window.speechSynthesis;
+let voiceEnabled = localStorage.getItem("voiceEnabled") === "true" || false;
+let selectedVoice = null;
+let availableVoices = [];
+
+// Voice settings for anime-style
+const voiceSettings = {
+  pitch: 1.3, // Higher pitch for anime girl voice
+  rate: 1.1, // Slightly faster for energetic feel
+  volume: 1.0,
+};
+
+// Load available voices
+function loadVoices() {
+  availableVoices = synth.getVoices();
+
+  // Try to find Japanese female voice (most anime-like)
+  selectedVoice = availableVoices.find(
+    (voice) => voice.lang.startsWith("ja") && voice.name.includes("Female")
+  );
+
+  // Fallback to any Japanese voice
+  if (!selectedVoice) {
+    selectedVoice = availableVoices.find((voice) =>
+      voice.lang.startsWith("ja")
+    );
+  }
+
+  // Fallback to any female voice in English
+  if (!selectedVoice) {
+    selectedVoice = availableVoices.find(
+      (voice) =>
+        voice.name.includes("Female") || voice.name.includes("Samantha")
+    );
+  }
+
+  // Ultimate fallback to first available voice
+  if (!selectedVoice && availableVoices.length > 0) {
+    selectedVoice = availableVoices[0];
+  }
+
+  console.log("Selected voice:", selectedVoice?.name || "None");
+  console.log("Available voices:", availableVoices.length);
+}
+
+// Load voices when available
+if (synth.onvoiceschanged !== undefined) {
+  synth.onvoiceschanged = loadVoices;
+}
+loadVoices();
+
+// Text-to-Speech function
+function speak(textToSpeak) {
+  // Don't speak if voice is disabled
+  if (!voiceEnabled) return;
+
+  // Cancel any ongoing speech
+  synth.cancel();
+
+  // Create utterance
+  const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+  // Set voice and settings
+  if (selectedVoice) {
+    utterance.voice = selectedVoice;
+  }
+  utterance.pitch = voiceSettings.pitch;
+  utterance.rate = voiceSettings.rate;
+  utterance.volume = voiceSettings.volume;
+
+  // Speak!
+  synth.speak(utterance);
+}
+
+// Toggle voice on/off
+function toggleVoice() {
+  voiceEnabled = !voiceEnabled;
+  localStorage.setItem("voiceEnabled", voiceEnabled.toString());
+  updateVoiceButton();
+
+  if (voiceEnabled) {
+    // Test voice
+    speak("Voice enabled!");
+  }
+}
+
+// Update voice button appearance
+function updateVoiceButton() {
+  if (voiceToggleBtn) {
+    if (voiceEnabled) {
+      voiceToggleBtn.classList.add("active");
+      voiceToggleBtn.title = "Voice ON (click to disable)";
+    } else {
+      voiceToggleBtn.classList.remove("active");
+      voiceToggleBtn.title = "Voice OFF (click to enable)";
+    }
+  }
+}
+
+// Voice toggle button event
+if (voiceToggleBtn) {
+  voiceToggleBtn.addEventListener("click", toggleVoice);
+  updateVoiceButton();
+}
 
 // Sticker collection (WhatsApp-style)
 const stickers = [
@@ -561,6 +669,9 @@ async function getMashaResponse() {
     const mashaReply = chatCompletion.choices[0].message.content;
     typingIndicator.style.display = "none";
     appendMessage("assistant", mashaReply);
+
+    // Speak the response if voice is enabled
+    speak(mashaReply);
   } catch (error) {
     console.error("OpenRouter Error:", error);
     typingIndicator.style.display = "none";
