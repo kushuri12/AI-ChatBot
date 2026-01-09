@@ -118,14 +118,20 @@ class PredictiveEngine {
       shouldValidate: false,
       shouldJoke: false,
       shouldBeDirective: false,
+      humanQuirk: "none", // typo, filler, laugh, emoji_single
     };
+
+    // Random human quirk percentage (30%)
+    if (Math.random() < 0.3) {
+      const quirks = ["typo", "filler", "laugh"];
+      style.humanQuirk = quirks[Math.floor(Math.random() * quirks.length)];
+    }
 
     // Adjust based on user needs
     if (userNeeds.wantsToVent) {
       style.length = "short";
       style.tone = "supportive";
       style.shouldValidate = true;
-      style.shouldAskQuestion = false; // Let them vent
     }
 
     if (userNeeds.needsAdvice) {
@@ -137,7 +143,7 @@ class PredictiveEngine {
     if (userNeeds.wantsToCelebrate) {
       style.tone = "playful";
       style.shouldValidate = true;
-      style.shouldJoke = false; // Be genuine
+      style.humanQuirk = "laugh";
     }
 
     if (userNeeds.needsDistraction) {
@@ -146,22 +152,11 @@ class PredictiveEngine {
       style.shouldAskQuestion = true;
     }
 
-    if (userNeeds.needsInformation) {
-      style.length = "medium";
-      style.tone = "casual";
-      style.shouldAskQuestion = false;
-      style.shouldBeDirective = true;
-    }
-
-    // Adjust based on typing style
-    if (conversationPatterns.typingStyle === "formal") {
-      style.tone = "supportive"; // Slightly less casual
-    }
-
     // Adjust based on emotion
     if (["tired", "frustrated"].includes(emotion)) {
-      style.length = "short"; // Don't overwhelm
-      style.shouldJoke = false;
+      style.length = "short";
+      style.tone = "supportive";
+      style.humanQuirk = "filler";
     }
 
     return style;
@@ -259,12 +254,36 @@ class PredictiveEngine {
       conversationShifted,
       topicSuggestion,
       smartContext,
+      longTermMemories: this.memory.retrieveRelevantMemories(message),
     };
   }
 
   // === BUILD ENHANCED PROMPT ===
   buildEnhancedPrompt(guidelines) {
-    let prompt = "\n\n[ULTRA INTELLIGENCE MODE ACTIVATED]\n";
+    let prompt = "\n\n[SUPREME INTELLIGENCE SYSTEM ACTVATED]";
+
+    // Hidden Reasoning (The "Inner Monologue")
+    prompt += `\n\n[INNER MONOLOGUE / STATE OF MIND]:`;
+    prompt += `\n- Character objective: Be at least as smart and immersive as Character.ai.`;
+    prompt += `\n- Current Dynamic: ${
+      guidelines.smartContext.relationshipLevel > 8
+        ? "Very Close"
+        : guidelines.smartContext.relationshipLevel > 5
+        ? "Friendly"
+        : "Casual"
+    }`;
+    prompt += `\n- Strategic Goal: Deepen the immersion. React to subtext, not just text.`;
+    if (guidelines.userNeeds.wantsToVent)
+      prompt += `\n- Strategic Goal: Be a safe space for them to talk.`;
+
+    // Long-Term Memory Injection
+    if (guidelines.longTermMemories && guidelines.longTermMemories.length > 0) {
+      prompt += `\n\n[LONG-TERM MEMORIES (INJECTED)]:`;
+      guidelines.longTermMemories.forEach((mem) => {
+        prompt += `\n- ${mem.content}`;
+      });
+      prompt += `\n(Use these memories naturally to show you remember things from long ago)`;
+    }
 
     // User emotional state
     if (guidelines.smartContext.emotionalState !== "neutral") {
@@ -284,6 +303,16 @@ class PredictiveEngine {
     prompt += `\n\n📝 RESPONSE STYLE:`;
     prompt += `\n- Length: ${guidelines.responseStyle.length.toUpperCase()}`;
     prompt += `\n- Tone: ${guidelines.responseStyle.tone}`;
+
+    // Human Quirk Instruction
+    if (guidelines.responseStyle.humanQuirk !== "none") {
+      const quirk = guidelines.responseStyle.humanQuirk;
+      if (quirk === "typo")
+        prompt += `\n- ✓ Add a subtle typo (ex: 'emang' -> 'emnag')`;
+      if (quirk === "filler")
+        prompt += `\n- ✓ Use filler words like 'apa ya', 'keknya'`;
+      if (quirk === "laugh") prompt += `\n- ✓ Use 'wkwk' if appropriate`;
+    }
 
     if (guidelines.responseStyle.shouldValidate) {
       prompt += `\n- ✓ VALIDATE their feelings/achievement`;
@@ -327,7 +356,14 @@ class PredictiveEngine {
       });
     }
 
-    prompt += `\n\n⚡ RESPOND AS MASHA WITH SUPREME INTELLIGENCE!\n`;
+    prompt += `\n\n[GOLDEN INSTRUCTION]:
+1. Respond like a real human (lowercase, slang, typo).
+2. Think BEFORE you speak: what does the user actually WANT from this chat?
+3. Reference past memories if they fit, but don't force it.
+4. If the user is emotional, match their energy level.
+5. BE THE CHARACTER. Do not break persona.`;
+
+    prompt += `\n\n⚡ RESPOND AS MASHA WITH SUPREME INTELLIGENCE! (C.AI MODE)\n`;
 
     return prompt;
   }

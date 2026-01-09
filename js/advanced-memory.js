@@ -13,32 +13,11 @@ class AdvancedMemory {
   }
 
   loadMemory() {
-    try {
-      if (fs.existsSync(this.memoryPath)) {
-        const data = fs.readFileSync(this.memoryPath, "utf8");
-        return JSON.parse(data);
-      }
-    } catch (err) {
-      console.error("Error loading advanced memory:", err);
-    }
-
-    return {
-      // === DEEP ENTITY TRACKING ===
-      entities: {
-        people: {}, // Track people mentioned: { name: { traits, relationship, lastMentioned } }
-        places: {}, // Track places: { name: { context, frequency, lastMentioned } }
-        things: {}, // Track objects/items mentioned
-        events: {}, // Track events/activities
-      },
-
-      // === EMOTIONAL INTELLIGENCE ===
+    const defaultMemory = {
+      entities: { people: {}, places: {}, things: {}, events: {} },
       emotionalProfile: {
-        dominantMoods: [], // [{ mood, frequency, lastSeen }]
-        triggers: {
-          positive: [], // What makes user happy
-          negative: [], // What stresses user
-          neutral: [],
-        },
+        dominantMoods: [],
+        triggers: { positive: [], negative: [], neutral: [] },
         patterns: {
           morningMood: "unknown",
           afternoonMood: "unknown",
@@ -46,70 +25,66 @@ class AdvancedMemory {
           nightMood: "unknown",
         },
         responsePreferences: {
-          longResponses: 0, // -10 to 10 scale
+          longResponses: 0,
           joking: 0,
           supportive: 0,
           direct: 0,
         },
       },
-
-      // === TOPIC INTELLIGENCE ===
-      topicGraph: {
-        // { topicName: { relatedTopics: [], frequency, sentiment, keywords: [], lastDetails: {} } }
-      },
-
-      // === CONVERSATION PATTERNS ===
+      topicGraph: {},
       conversationPatterns: {
         averageMessageLength: 0,
-        typingStyle: "unknown", // formal, casual, mixed
-        commonPhrases: {}, // { phrase: frequency }
+        typingStyle: "unknown",
+        commonPhrases: {},
         questionFrequency: 0,
         responseTime: "medium",
-        conversationStarters: [], // How they usually start conversations
+        conversationStarters: [],
       },
-
-      // === GOALS & PROJECTS TRACKING ===
-      activeGoals: [
-        // { goal, startDate, mentions, progress, relatedTopics: [] }
-      ],
+      activeGoals: [],
       completedGoals: [],
-
-      // === PREFERENCES & HABITS ===
       preferences: {
         favoriteTopics: [],
         avoidTopics: [],
-        timePreferences: {
-          // When they usually chat
-          morning: 0,
-          afternoon: 0,
-          evening: 0,
-          night: 0,
-        },
+        timePreferences: { morning: 0, afternoon: 0, evening: 0, night: 0 },
       },
-
-      // === RELATIONSHIP DYNAMICS ===
       relationship: {
-        intimacyLevel: 5, // 1-10 scale
+        intimacyLevel: 5,
         trustLevel: 5,
         humor: 5,
         respectLevel: 10,
         conversationComfort: 5,
       },
-
-      // === LEARNING LOG ===
-      learningLog: [
-        // { timestamp, insight, category, confidence }
-      ],
-
-      // === META INFO ===
+      learningLog: [],
       meta: {
         totalConversations: 0,
         totalMessages: 0,
         firstInteraction: new Date().toISOString(),
         lastInteraction: new Date().toISOString(),
-        version: "2.0",
+        version: "3.0",
       },
+      pinnedMemories: [],
     };
+
+    try {
+      if (fs.existsSync(this.memoryPath)) {
+        const data = fs.readFileSync(this.memoryPath, "utf8");
+        const parsed = JSON.parse(data);
+        // Robust deep merge (simplified)
+        return {
+          ...defaultMemory,
+          ...parsed,
+          relationship: {
+            ...defaultMemory.relationship,
+            ...parsed.relationship,
+          },
+          meta: { ...defaultMemory.meta, ...parsed.meta },
+        };
+      }
+    } catch (err) {
+      console.error("Error loading advanced memory:", err);
+    }
+
+    return defaultMemory;
   }
 
   saveMemory() {
@@ -531,7 +506,91 @@ class AdvancedMemory {
     // Get recent insights
     context.insights = this.memory.learningLog.slice(-5);
 
+    // Get Pinned Memories
+    context.pinnedMemories = this.memory.pinnedMemories;
+
     return context;
+  }
+
+  // === LONG-TERM MEMORY RETRIEVAL ===
+  retrieveRelevantMemories(message, limit = 3) {
+    const msg = message.toLowerCase();
+    const relevant = [];
+
+    // Search in Learning Log
+    this.memory.learningLog.forEach((item) => {
+      const insight = item.insight.toLowerCase();
+      // Simple keyword matching for relevance
+      const keywords = msg.split(" ").filter((w) => w.length > 3);
+      const matchCount = keywords.filter((w) => insight.includes(w)).length;
+
+      if (matchCount > 0) {
+        relevant.push({
+          content: item.insight,
+          score: matchCount,
+          timestamp: item.timestamp,
+        });
+      }
+    });
+
+    // Search in Entity Contexts
+    Object.entries(this.memory.entities.people).forEach(([name, data]) => {
+      if (msg.includes(name.toLowerCase())) {
+        data.contexts.forEach((ctx) => {
+          relevant.push({
+            content: `Interaction with ${name}: ${ctx}`,
+            score: 2,
+            timestamp: data.lastMentioned,
+          });
+        });
+      }
+    });
+
+    return relevant.sort((a, b) => b.score - a.score).slice(0, limit);
+  }
+
+  // === DYNAMIC RELATIONSHIP UPDATE ===
+  updateRelationship(emotion, message) {
+    const msg = message.toLowerCase();
+
+    // Positive impact
+    if (["happy", "excited", "content"].includes(emotion)) {
+      this.memory.relationship.intimacyLevel = Math.min(
+        10,
+        this.memory.relationship.intimacyLevel + 0.05
+      );
+      this.memory.relationship.trustLevel = Math.min(
+        10,
+        this.memory.relationship.trustLevel + 0.02
+      );
+    }
+
+    // Negative impact
+    if (emotion === "angry") {
+      this.memory.relationship.intimacyLevel = Math.max(
+        1,
+        this.memory.relationship.intimacyLevel - 0.1
+      );
+      this.memory.relationship.trustLevel = Math.max(
+        1,
+        this.memory.relationship.trustLevel - 0.05
+      );
+    }
+
+    // Bonding keywords
+    if (
+      msg.includes("makasih") ||
+      msg.includes("sayang") ||
+      msg.includes("temen") ||
+      msg.includes("curhat")
+    ) {
+      this.memory.relationship.intimacyLevel = Math.min(
+        10,
+        this.memory.relationship.intimacyLevel + 0.1
+      );
+    }
+
+    this.saveMemory();
   }
 
   // === UPDATE META ===
@@ -547,6 +606,7 @@ class AdvancedMemory {
     const emotion = this.analyzeEmotion(message);
     this.analyzeConversationPattern(message);
     this.detectGoals(message);
+    this.updateRelationship(emotion, message);
 
     if (topics.length > 0) {
       this.updateTopicGraph(topics, message, emotion);
@@ -557,6 +617,7 @@ class AdvancedMemory {
     return {
       emotion,
       smartContext: this.getSmartContext(),
+      longTermMemories: this.retrieveRelevantMemories(message),
     };
   }
 }
