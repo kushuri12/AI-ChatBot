@@ -85,9 +85,12 @@ OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxx
 ## 📁 Project Structure
 
 ```
-isengaja/
-├── index.html              # Main app file (upgraded version)
-├── index_upgraded.html     # Development version
+AI-ChatBot/
+├── css/
+│   └── style.css           # All styles (glassmorphism, animations, etc)
+├── js/
+│   └── app.js              # Main application logic & AI system
+├── index.html              # Clean HTML structure
 ├── main.js                 # Electron main process
 ├── package.json            # Project configuration
 ├── .env                    # Environment variables (not in git)
@@ -96,7 +99,9 @@ isengaja/
 ├── chat_history.json       # Persistent chat storage
 ├── context_memory.json     # AI context & memory
 ├── masha.png               # Avatar image
-├── UPGRADE_NOTES.md        # Detailed upgrade documentation
+├── README.md               # This file
+├── GIT_INSTRUCTIONS.md     # How to push to GitHub
+├── REFACTOR_NOTES.md       # Code organization notes
 └── node_modules/           # Dependencies (not in git)
 ```
 
