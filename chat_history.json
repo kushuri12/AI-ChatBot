@@ -234,5 +234,25 @@
   {
     "role": "user",
     "content": "woi"
+  },
+  {
+    "role": "assistant",
+    "content": "kenapa lagi sih\n"
+  },
+  {
+    "role": "user",
+    "content": "gg"
+  },
+  {
+    "role": "assistant",
+    "content": "yaudah bagus dongwoi\n"
+  },
+  {
+    "role": "user",
+    "content": "😭"
+  },
+  {
+    "role": "assistant",
+    "content": "kenapa anjir"
   }
 ]
