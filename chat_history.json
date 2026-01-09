@@ -46,5 +46,93 @@
   {
     "role": "assistant",
     "content": "santai elah\n"
+  },
+  {
+    "role": "user",
+    "content": "😘"
+  },
+  {
+    "role": "assistant",
+    "content": "apaan sih\n"
+  },
+  {
+    "role": "user",
+    "content": "bruh"
+  },
+  {
+    "role": "assistant",
+    "content": "kenapa sih\n"
+  },
+  {
+    "role": "user",
+    "content": "oya enknya buat apa ya"
+  },
+  {
+    "role": "assistant",
+    "content": "buat apa apaan"
+  },
+  {
+    "role": "user",
+    "content": "koding buat apa"
+  },
+  {
+    "role": "assistant",
+    "content": "buat bikin macem macem lah\n"
+  },
+  {
+    "role": "user",
+    "content": "apa itu"
+  },
+  {
+    "role": "assistant",
+    "content": "banyak anjir, ga bisa disebutin semua\n"
+  },
+  {
+    "role": "user",
+    "content": "1 aja"
+  },
+  {
+    "role": "assistant",
+    "content": "game"
+  },
+  {
+    "role": "user",
+    "content": "wtf buat game?"
+  },
+  {
+    "role": "assistant",
+    "content": "iya lah kenapa emang"
+  },
+  {
+    "role": "user",
+    "content": "susah itu"
+  },
+  {
+    "role": "assistant",
+    "content": "iya sih, kenapa mau coba?\n"
+  },
+  {
+    "role": "user",
+    "content": "susah buat yg gampang apa"
+  },
+  {
+    "role": "assistant",
+    "content": "ya bikin web mungkin"
+  },
+  {
+    "role": "user",
+    "content": "itu mah udh jago aku"
+  },
+  {
+    "role": "assistant",
+    "content": "yaudah bagus dong"
+  },
+  {
+    "role": "user",
+    "content": "woi"
+  },
+  {
+    "role": "assistant",
+    "content": "kenapa lagi sih\n"
   }
 ]

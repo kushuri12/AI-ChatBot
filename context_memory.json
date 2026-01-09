@@ -1,7 +1,14 @@
 {
-  "topics": [],
+  "topics": [
+    "game"
+  ],
   "userPreferences": {},
   "recentEvents": [],
   "mood": "neutral",
-  "lastTopicDetails": {}
+  "lastTopicDetails": {
+    "game": {
+      "lastMentioned": "2026-01-09T21:25:07.338Z",
+      "context": "wtf buat game?"
+    }
+  }
 }
