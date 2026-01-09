@@ -47,8 +47,8 @@
 1. **Clone repository**
 
    ```bash
-   git clone <your-repo-url>
-   cd isengaja
+   git clone https://github.com/kushuri12/AI-ChatBot.git
+   cd AI-ChatBot
    ```
 
 2. **Install dependencies**
