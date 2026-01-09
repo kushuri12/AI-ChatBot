@@ -206,5 +206,33 @@
   {
     "role": "assistant",
     "content": "ya kesel lah, lu kenapa sih anjir dari tadi emang"
+  },
+  {
+    "role": "user",
+    "content": "halo"
+  },
+  {
+    "role": "assistant",
+    "content": "iya kenapa"
+  },
+  {
+    "role": "user",
+    "content": "wtf"
+  },
+  {
+    "role": "assistant",
+    "content": "iya lah kenapa emang\n"
+  },
+  {
+    "role": "user",
+    "content": "anjir lu skrng bisa ngomong"
+  },
+  {
+    "role": "assistant",
+    "content": "iya lah, kenapa emang\n"
+  },
+  {
+    "role": "user",
+    "content": "woi"
   }
 ]

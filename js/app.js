@@ -49,10 +49,10 @@ let voiceEnabled = localStorage.getItem("voiceEnabled") === "true" || false;
 let selectedVoice = null;
 let availableVoices = [];
 
-// Voice settings for anime-style
+// Voice settings for natural anime-style character (Masha)
 const voiceSettings = {
-  pitch: 1.3, // Higher pitch for anime girl voice
-  rate: 1.1, // Slightly faster for energetic feel
+  pitch: 1.4, // Higher pitch for young female anime character
+  rate: 1.0, // Normal rate for natural, clear conversation
   volume: 1.0,
 };
 
@@ -60,33 +60,75 @@ const voiceSettings = {
 function loadVoices() {
   availableVoices = synth.getVoices();
 
-  // Try to find Japanese female voice (most anime-like)
+  console.log("🎙️ Available voices:", availableVoices.length);
+  console.log("📋 Voice list:");
+  availableVoices.forEach((voice, i) => {
+    console.log(`  ${i}: ${voice.name} (${voice.lang})`);
+  });
+
+  // Priority 1: Indonesian Female voice (BEST for Indonesian text & anime feel)
   selectedVoice = availableVoices.find(
-    (voice) => voice.lang.startsWith("ja") && voice.name.includes("Female")
+    (voice) =>
+      voice.lang.startsWith("id") &&
+      (voice.name.toLowerCase().includes("female") ||
+        voice.name.toLowerCase().includes("wanita") ||
+        voice.name.toLowerCase().includes("perempuan") ||
+        voice.name.toLowerCase().includes("damayanti"))
   );
 
-  // Fallback to any Japanese voice
+  // Priority 2: Any Indonesian voice
   if (!selectedVoice) {
     selectedVoice = availableVoices.find((voice) =>
-      voice.lang.startsWith("ja")
+      voice.lang.startsWith("id")
     );
   }
 
-  // Fallback to any female voice in English
+  // Priority 3: Japanese Female (good for anime feel but text in Japanese only)
+  if (!selectedVoice) {
+    selectedVoice = availableVoices.find(
+      (voice) => voice.lang.startsWith("ja") && voice.name.includes("Female")
+    );
+  }
+
+  // Priority 4: English Female voices (common fallback)
   if (!selectedVoice) {
     selectedVoice = availableVoices.find(
       (voice) =>
-        voice.name.includes("Female") || voice.name.includes("Samantha")
+        voice.lang.startsWith("en") &&
+        (voice.name.includes("Female") ||
+          voice.name.includes("Samantha") ||
+          voice.name.includes("Karen") ||
+          voice.name.includes("Moira") ||
+          voice.name.includes("Zira"))
     );
   }
 
-  // Ultimate fallback to first available voice
+  // Priority 5: Any female-sounding voice
+  if (!selectedVoice) {
+    selectedVoice = availableVoices.find(
+      (voice) =>
+        voice.name.toLowerCase().includes("female") ||
+        voice.name.toLowerCase().includes("woman") ||
+        voice.name.toLowerCase().includes("girl")
+    );
+  }
+
+  // Ultimate fallback
   if (!selectedVoice && availableVoices.length > 0) {
     selectedVoice = availableVoices[0];
   }
 
-  console.log("Selected voice:", selectedVoice?.name || "None");
-  console.log("Available voices:", availableVoices.length);
+  console.log("✅ Selected voice:", selectedVoice?.name || "None");
+  console.log("🌍 Voice language:", selectedVoice?.lang || "Unknown");
+
+  // Show helpful message if no Indonesian voice found
+  if (selectedVoice && !selectedVoice.lang.startsWith("id")) {
+    console.warn("⚠️ No Indonesian voice found. Using:", selectedVoice.name);
+    console.info(
+      "💡 Tip: Install Indonesian language pack on Windows for better experience!"
+    );
+    console.info("   Settings → Time & Language → Language → Add Indonesian");
+  }
 }
 
 // Load voices when available
