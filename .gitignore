@@ -8,6 +8,7 @@ package-lock.json
 # Chat data (optional - uncomment if you want to keep chat history private)
 chat_history.json
 context_memory.json
+advanced_memory.json
 
 # Backup files
 *.backup

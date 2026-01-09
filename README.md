@@ -1,281 +1,96 @@
-# 💖 Chat with Masha - AI Chatbot Electron App
+# Chat Masha 💬
 
-> Chat dengan Masha (Maria Mikhailovna Kujou dari Roshidere) - AI chatbot dengan genius-level intelligence dan WhatsApp-style stickers!
+Aplikasi chat dengan AI chatbot Masha (dari Roshidere) menggunakan OpenRouter API.
 
-![Version](https://img.shields.io/badge/version-2.0-pink)
-![Electron](https://img.shields.io/badge/Electron-Latest-blue)
-![AI](https://img.shields.io/badge/AI-Gemini%202.0-purple)
+## ✨ Fitur
 
-## ✨ Features
+### 🤖 **ULTRA INTELLIGENT AI** (NEW!)
 
-### 🎨 Core Features
+- 🧠 **Advanced Memory System** - Perfect photographic memory, inget SEMUA detail
+- 🎯 **Predictive Intelligence** - Anticipate user needs sebelum diminta
+- 🎭 **Emotional Genius** - Baca emosi dengan 8+ emotion detection
+- 📊 **Topic Graph** - Connect & track relationships antar topik
+- 💡 **Learning System** - Makin lama makin pintar & personal
+- 🔮 **Context Mastery** - Recall conversation dari minggu lalu dengan detail
 
-- **AI Chatbot Pintar** dengan personality Masha dari Roshidere
-- **WhatsApp-Style Stickers** (104 stickers!)
-- **Perfect Memory System** - AI inget semua obrolan
-- **Emotional Intelligence** - Baca mood & context
-- **Persistent Chat History** - Chat history tersimpan
-- **Beautiful UI** - Glassmorphism design dengan animasi smooth
+### 💬 **Core Features**
 
-### 🧠 AI Capabilities
+- 🤖 **AI Chatbot** - Chat dengan Masha yang punya supreme intelligence
+- 😊 **Stickers** - Kirim emoji sticker kayak WhatsApp
+- 💾 **Chat History** - Otomatis simpan riwayat chat
+- 📱 **Responsive UI** - Tampilan modern dan smooth
 
-- ✅ **Genius-Level Intelligence** dengan perfect memory
-- ✅ **Sticker Understanding** - Ngerti arti emoji/sticker
-- ✅ **Context Mastery** - Callback ke obrolan sebelumnya
-- ✅ **Emotional Reading** - Deteksi mood dari cara chat
-- ✅ **Multi-Layer Thinking** - Understand surface, intent, & needs
-- ✅ **Natural Conversations** - Chat natural kayak teman asli
+**[📖 Baca lengkap tentang AI Intelligence System →](AI_INTELLIGENCE.md)**
 
-### 😊 Sticker Features
+## 🚀 Cara Pakai
 
-- 104 emoji stickers dalam grid 4 kolom
-- Modal picker dengan animasi smooth
-- Auto-close saat klik di luar
-- Sticker display besar di chat
-- Categories: emotions, hearts, reactions, party, dll
+### 1. Install Dependencies
 
-## 🚀 Quick Start
+```bash
+npm install
+```
 
-### Prerequisites
+### 2. Setup Environment Variables
 
-- Node.js (v14 atau lebih baru)
-- npm atau yarn
-- OpenRouter API Key (untuk akses Gemini 2.0)
-
-### Installation
-
-1. **Clone repository**
-
-   ```bash
-   git clone https://github.com/kushuri12/AI-ChatBot.git
-   cd AI-ChatBot
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Setup environment variables**
-
-   ```bash
-   # Copy .env.example ke .env
-   cp .env.example .env
-
-   # Edit .env dan tambahkan API key kamu
-   # OPENROUTER_API_KEY=your-api-key-here
-   ```
-
-4. **Run aplikasi**
-   ```bash
-   npm start
-   ```
-
-## 🔑 Getting API Key
-
-1. Daftar di [OpenRouter](https://openrouter.ai/)
-2. Buat API key di dashboard
-3. Copy key dan paste ke file `.env`
+Buat file `.env` di root folder:
 
 ```env
-OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxx
+OPENROUTER_API_KEY=your_openrouter_api_key_here
 ```
 
-## 📁 Project Structure
+Dapatkan API key gratis di: https://openrouter.ai/
 
-```
-AI-ChatBot/
-├── css/
-│   └── style.css           # All styles (glassmorphism, animations, etc)
-├── js/
-│   └── app.js              # Main application logic & AI system
-├── index.html              # Clean HTML structure
-├── main.js                 # Electron main process
-├── package.json            # Project configuration
-├── .env                    # Environment variables (not in git)
-├── .env.example            # Template for .env
-├── .gitignore              # Git ignore rules
-├── chat_history.json       # Persistent chat storage
-├── context_memory.json     # AI context & memory
-├── masha.png               # Avatar image
-├── README.md               # This file
-├── GIT_INSTRUCTIONS.md     # How to push to GitHub
-├── REFACTOR_NOTES.md       # Code organization notes
-└── node_modules/           # Dependencies (not in git)
+### 3. Jalankan Aplikasi
+
+```bash
+npm start
 ```
 
-## 💡 Usage
+Aplikasi akan terbuka otomatis di Electron window.
 
-### Basic Chat
+## 🎯 Cara Kerja
 
-1. Ketik pesan di input box
-2. Tekan Enter atau klik tombol kirim
-3. Masha akan balas dengan natural & contextual
+1. **Chatbot**: Menggunakan Gemini 2.0 Flash Lite melalui OpenRouter
+2. **Memory**: Menyimpan chat history di `chat_history.json`
+3. **Context**: Tracking mood dan topik di `context_memory.json`
 
-### Send Stickers
+## 📝 Catatan
 
-1. Klik tombol emoji (😊) di samping input
-2. Pilih sticker dari grid
-3. Sticker langsung terkirim
-
-### AI Features
-
-- **Memory**: AI inget semua obrolan kamu
-- **Context**: Reference obrolan kemarin secara natural
-- **Emotions**: Kirim sticker, AI ngerti artinya
-- **Smart**: AI baca mood kamu dari cara chat
-
-## 🎯 Example Conversations
-
-### Memory & Callback
-
-```
-[Day 1]
-You: "gua lagi project backend ribet, 7 microservices"
-Masha: "buset kompleks, deadline kapan"
-
-You: "2 minggu"
-Masha: "ketat juga"
-
-[Day 2]
-You: "akhirnya mulai"
-Masha: "oh project backend itu? gimana"  ← REMEMBERS!
-```
-
-### Sticker Understanding
-
-```
-You: [😭 sticker]
-Masha: "ada apa anjir"
-
-You: "cape meeting 8 jam"
-Masha: "gila lama banget"
-
-You: [❤️ sticker]
-Masha: "iya iya"
-```
+- ❌ **STT (Speech-to-Text)** - Dihapus
+- ❌ **TTS (Text-to-Speech)** - Dihapus
+- ✅ **Chatbot AI** - Aktif & berfungsi
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: HTML, CSS (Tailwind), Vanilla JavaScript
-- **Desktop**: Electron
-- **AI Model**: Google Gemini 2.0 Flash Lite (via OpenRouter)
-- **Storage**: Local JSON files
-- **Fonts**: Plus Jakarta Sans, Outfit (Google Fonts)
+- **Electron** - Desktop app framework
+- **OpenRouter API** - AI gateway
+- **Gemini 2.0** - AI model
+- **Tailwind CSS** - Styling
+- **Node.js** - Backend
 
-## 📝 Configuration
+## 📦 File Structure
 
-### AI Settings
-
-Edit di `index.html` bagian `getMashaResponse()`:
-
-```javascript
-model: "google/gemini-2.0-flash-lite-001",
-temperature: 0.8,      // Creativity level (0-1)
-max_tokens: 200,       // Response length
-top_p: 0.9            // Nucleus sampling
+```
+├── index.html          # Main UI
+├── js/
+│   └── app.js         # Main logic (no STT/TTS)
+├── css/
+│   └── style.css      # Custom styles
+├── main.js            # Electron main process
+├── chat_history.json  # Chat history storage
+└── context_memory.json # Context tracking
 ```
 
-### Chat History
+## 🎨 Personality
 
-- Auto-saved ke `chat_history.json`
-- Keeps last 100 messages
-- Persistent across sessions
+Masha adalah AI chatbot dengan karakteristik:
 
-### Context Memory
-
-- Saved to `context_memory.json`
-- Tracks: topics, mood, events, preferences
-- Used for smart callbacks
-
-## 🎨 Customization
-
-### Change Avatar
-
-Replace `masha.png` dengan gambar kamu (recommended: 512x512px)
-
-### Modify Stickers
-
-Edit array `stickers` di `index.html`:
-
-```javascript
-const stickers = [
-  "😊",
-  "😍", // Add your emojis here
-];
-```
-
-### Change Colors
-
-Edit CSS variables di `index.html`:
-
-```css
-:root {
-  --primary: #ff85a2; /* Main color */
-  --primary-hover: #ff6b8e; /* Hover color */
-  --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #fee2e8 100%);
-}
-```
-
-## 🐛 Troubleshooting
-
-### API Key Error
-
-- Pastikan `.env` file ada dan berisi API key yang valid
-- Check format: `OPENROUTER_API_KEY=sk-or-v1-...`
-
-### Stickers Tidak Muncul
-
-- Clear chat history: hapus `chat_history.json`
-- Restart aplikasi
-
-### AI Tidak Respon
-
-- Check internet connection
-- Verify API key masih valid
-- Check OpenRouter API status
-
-## 📦 Build for Production
-
-```bash
-# Install electron-builder
-npm install --save-dev electron-builder
-
-# Build for Windows
-npm run build
-
-# Build for macOS
-npm run build:mac
-
-# Build for Linux
-npm run build:linux
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
-
-- Report bugs
-- Suggest features
-- Submit pull requests
-
-## 📄 License
-
-MIT License - feel free to use for personal or commercial projects
-
-## 👤 Author
-
-Created with ❤️ for awesome conversations with Masha!
-
-## 🙏 Acknowledgments
-
-- Character: Masha (Maria Mikhailovna Kujou) from "Roshidere"
-- AI: Google Gemini via OpenRouter
-- Icons & Emojis: Unicode Emoji Standard
+- Sarcastic tapi caring
+- Genius-level intelligence
+- Perfect photographic memory
+- Natural Indonesian language
+- Bestie vibes (bukan romantic)
 
 ---
 
-**Made with 💖 using Electron & Gemini AI**
-
-_Enjoy chatting with Masha!_ ✨
+Made with ❤️ by Mila/Kuru

@@ -6,11 +6,53 @@ const fs = require("fs");
 const path = require("path");
 const OpenAI = require("openai");
 
-require("dotenv").config({ path: path.join(__dirname, ".env") });
+// Robust path resolution for Electron
+// In Electron renderer, __dirname usually points to the directory of index.html
+let rootDir = __dirname;
+let jsDir = path.join(rootDir, "js");
 
-// File paths
-const historyFilePath = path.join(__dirname, "chat_history.json");
-const contextFilePath = path.join(__dirname, "context_memory.json");
+// Check if we are already inside the js folder
+if (__dirname.endsWith("js") || __dirname.endsWith("js\\")) {
+  rootDir = path.join(__dirname, "..");
+  jsDir = __dirname;
+}
+
+// Load environment variables (from root)
+const envPath = path.join(rootDir, ".env");
+require("dotenv").config({ path: envPath });
+
+console.log("📂 Path Info:", {
+  __dirname,
+  rootDir,
+  jsDir,
+  envExists: fs.existsSync(envPath),
+});
+
+// === ULTRA INTELLIGENT AI MODULES ===
+let advancedMemory = null;
+let predictiveEngine = null;
+let aiIntelligenceEnabled = false;
+
+try {
+  // Modules are in the js directory
+  const AdvancedMemory = require(path.join(jsDir, "advanced-memory.js"));
+  const PredictiveEngine = require(path.join(jsDir, "predictive-engine.js"));
+
+  // Initialize AI Intelligence
+  advancedMemory = new AdvancedMemory();
+  predictiveEngine = new PredictiveEngine(advancedMemory);
+  aiIntelligenceEnabled = true;
+
+  console.log("✨ ULTRA INTELLIGENCE MODE: ACTIVATED");
+} catch (err) {
+  console.error("⚠️ AI Intelligence modules failed to load:", err.message);
+  console.log("📝 Running in BASIC MODE (AI features disabled)");
+  aiIntelligenceEnabled = false;
+}
+
+// File paths (in root directory)
+const historyFilePath = path.join(rootDir, "chat_history.json");
+const contextFilePath = path.join(rootDir, "context_memory.json");
 
 // API Configuration
 const apiKey = process.env.OPENROUTER_API_KEY;
@@ -40,157 +82,8 @@ const stickerBtn = document.getElementById("stickerBtn");
 const stickerModal = document.getElementById("stickerModal");
 const closeStickerBtn = document.getElementById("closeStickerBtn");
 const stickerGrid = document.getElementById("stickerGrid");
-const voiceToggleBtn = document.getElementById("voiceToggleBtn");
 
-// ========== VOICE/AUDIO SYSTEM ==========
-// Initialize Speech Synthesis (built-in browser TTS)
-const synth = window.speechSynthesis;
-let voiceEnabled = localStorage.getItem("voiceEnabled") === "true" || false;
-let selectedVoice = null;
-let availableVoices = [];
-
-// Voice settings for natural anime-style character (Masha)
-const voiceSettings = {
-  pitch: 1.4, // Higher pitch for young female anime character
-  rate: 1.0, // Normal rate for natural, clear conversation
-  volume: 1.0,
-};
-
-// Load available voices
-function loadVoices() {
-  availableVoices = synth.getVoices();
-
-  console.log("🎙️ Available voices:", availableVoices.length);
-  console.log("📋 Voice list:");
-  availableVoices.forEach((voice, i) => {
-    console.log(`  ${i}: ${voice.name} (${voice.lang})`);
-  });
-
-  // Priority 1: Indonesian Female voice (BEST for Indonesian text & anime feel)
-  selectedVoice = availableVoices.find(
-    (voice) =>
-      voice.lang.startsWith("id") &&
-      (voice.name.toLowerCase().includes("female") ||
-        voice.name.toLowerCase().includes("wanita") ||
-        voice.name.toLowerCase().includes("perempuan") ||
-        voice.name.toLowerCase().includes("damayanti"))
-  );
-
-  // Priority 2: Any Indonesian voice
-  if (!selectedVoice) {
-    selectedVoice = availableVoices.find((voice) =>
-      voice.lang.startsWith("id")
-    );
-  }
-
-  // Priority 3: Japanese Female (good for anime feel but text in Japanese only)
-  if (!selectedVoice) {
-    selectedVoice = availableVoices.find(
-      (voice) => voice.lang.startsWith("ja") && voice.name.includes("Female")
-    );
-  }
-
-  // Priority 4: English Female voices (common fallback)
-  if (!selectedVoice) {
-    selectedVoice = availableVoices.find(
-      (voice) =>
-        voice.lang.startsWith("en") &&
-        (voice.name.includes("Female") ||
-          voice.name.includes("Samantha") ||
-          voice.name.includes("Karen") ||
-          voice.name.includes("Moira") ||
-          voice.name.includes("Zira"))
-    );
-  }
-
-  // Priority 5: Any female-sounding voice
-  if (!selectedVoice) {
-    selectedVoice = availableVoices.find(
-      (voice) =>
-        voice.name.toLowerCase().includes("female") ||
-        voice.name.toLowerCase().includes("woman") ||
-        voice.name.toLowerCase().includes("girl")
-    );
-  }
-
-  // Ultimate fallback
-  if (!selectedVoice && availableVoices.length > 0) {
-    selectedVoice = availableVoices[0];
-  }
-
-  console.log("✅ Selected voice:", selectedVoice?.name || "None");
-  console.log("🌍 Voice language:", selectedVoice?.lang || "Unknown");
-
-  // Show helpful message if no Indonesian voice found
-  if (selectedVoice && !selectedVoice.lang.startsWith("id")) {
-    console.warn("⚠️ No Indonesian voice found. Using:", selectedVoice.name);
-    console.info(
-      "💡 Tip: Install Indonesian language pack on Windows for better experience!"
-    );
-    console.info("   Settings → Time & Language → Language → Add Indonesian");
-  }
-}
-
-// Load voices when available
-if (synth.onvoiceschanged !== undefined) {
-  synth.onvoiceschanged = loadVoices;
-}
-loadVoices();
-
-// Text-to-Speech function
-function speak(textToSpeak) {
-  // Don't speak if voice is disabled
-  if (!voiceEnabled) return;
-
-  // Cancel any ongoing speech
-  synth.cancel();
-
-  // Create utterance
-  const utterance = new SpeechSynthesisUtterance(textToSpeak);
-
-  // Set voice and settings
-  if (selectedVoice) {
-    utterance.voice = selectedVoice;
-  }
-  utterance.pitch = voiceSettings.pitch;
-  utterance.rate = voiceSettings.rate;
-  utterance.volume = voiceSettings.volume;
-
-  // Speak!
-  synth.speak(utterance);
-}
-
-// Toggle voice on/off
-function toggleVoice() {
-  voiceEnabled = !voiceEnabled;
-  localStorage.setItem("voiceEnabled", voiceEnabled.toString());
-  updateVoiceButton();
-
-  if (voiceEnabled) {
-    // Test voice
-    speak("Voice enabled!");
-  }
-}
-
-// Update voice button appearance
-function updateVoiceButton() {
-  if (voiceToggleBtn) {
-    if (voiceEnabled) {
-      voiceToggleBtn.classList.add("active");
-      voiceToggleBtn.title = "Voice ON (click to disable)";
-    } else {
-      voiceToggleBtn.classList.remove("active");
-      voiceToggleBtn.title = "Voice OFF (click to enable)";
-    }
-  }
-}
-
-// Voice toggle button event
-if (voiceToggleBtn) {
-  voiceToggleBtn.addEventListener("click", toggleVoice);
-  updateVoiceButton();
-}
-
+// ========== STICKERS ==========
 // Sticker collection (WhatsApp-style)
 const stickers = [
   "🥰",
@@ -591,37 +484,50 @@ function appendMessage(role, text, save = true, isSticker = false) {
   }
 }
 
-// Analyze context (ENHANCED)
+// Analyze context (ULTRA INTELLIGENCE V2.0)
 function analyzeContext(userMessage) {
   const msg = userMessage.toLowerCase();
+  let aiAnalysis = null;
 
-  // Detect mood
-  if (
-    msg.includes("capek") ||
-    msg.includes("lelah") ||
-    msg.includes("stress") ||
-    msg.includes("pusing")
-  ) {
-    contextMemory.mood = "tired";
-    contextMemory.recentEvents.push(
-      `User feeling tired - ${new Date().toISOString()}`
-    );
-  } else if (
-    msg.includes("senang") ||
-    msg.includes("happy") ||
-    msg.includes("asik") ||
-    msg.includes("seru")
-  ) {
-    contextMemory.mood = "happy";
-  } else if (
-    msg.includes("sedih") ||
-    msg.includes("bete") ||
-    msg.includes("kesel")
-  ) {
-    contextMemory.mood = "sad";
+  // === ADVANCED AI PROCESSING (if enabled) ===
+  if (aiIntelligenceEnabled && advancedMemory && predictiveEngine) {
+    try {
+      // Extract topics using predictive engine
+      const topics = predictiveEngine.extractTopics(userMessage);
+
+      // Process with advanced memory (entity tracking, emotion analysis, pattern learning)
+      aiAnalysis = advancedMemory.processMessage(userMessage, topics);
+
+      console.log("🧠 AI Analysis:", {
+        detectedEmotion: aiAnalysis.emotion,
+        topics: topics,
+        smartContextReady: true,
+      });
+    } catch (err) {
+      console.error("⚠️ AI Analysis error:", err);
+      aiAnalysis = null;
+    }
   }
 
-  // Extract topics
+  // === BASIC BACKWARD COMPATIBILITY ===
+  // Still update simple context for legacy support
+  const emotionMap = {
+    tired: ["capek", "lelah", "stress", "pusing"],
+    happy: ["senang", "happy", "asik", "seru"],
+    sad: ["sedih", "bete", "kesel"],
+  };
+
+  for (const [emotion, keywords] of Object.entries(emotionMap)) {
+    if (keywords.some((keyword) => msg.includes(keyword))) {
+      contextMemory.mood = emotion;
+      contextMemory.recentEvents.push(
+        `User feeling ${emotion} - ${new Date().toISOString()}`
+      );
+      break;
+    }
+  }
+
+  // Extract topics (legacy)
   const topicKeywords = {
     kerja: ["kerja", "kantor", "meeting", "boss", "deadline", "project"],
     game: ["game", "main", "ranking"],
@@ -651,6 +557,8 @@ function analyzeContext(userMessage) {
   }
 
   saveContext();
+
+  return aiAnalysis;
 }
 
 // Build context prompt
@@ -686,11 +594,57 @@ async function getMashaResponse() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
   try {
+    let enhancedPrompt = "";
+    let temperature = 0.8;
+    let maxTokens = 200;
+
+    // === ULTRA INTELLIGENCE ACTIVATION (if enabled) ===
+    if (aiIntelligenceEnabled && advancedMemory && predictiveEngine) {
+      try {
+        const smartContext = advancedMemory.getSmartContext();
+
+        // Generate AI-powered response guidelines
+        const lastUserMessage = history[history.length - 1]?.content || "";
+        const guidelines = predictiveEngine.generateResponseGuidelines(
+          lastUserMessage,
+          history,
+          smartContext
+        );
+
+        console.log("⚡ Predictive Guidelines:", {
+          userNeeds: guidelines.userNeeds,
+          responseStyle: guidelines.responseStyle,
+          conversationShifted: guidelines.conversationShifted,
+        });
+
+        // Build enhanced AI prompt with intelligence layer
+        enhancedPrompt = predictiveEngine.buildEnhancedPrompt(guidelines);
+
+        // Adjust model parameters based on response style
+        if (guidelines.responseStyle.length === "short") {
+          maxTokens = 100;
+          temperature = 0.7; // More focused
+        } else if (guidelines.responseStyle.length === "medium") {
+          maxTokens = 150;
+        }
+
+        if (guidelines.responseStyle.shouldGiveAdvice) {
+          temperature = 0.75; // Slightly more thoughtful
+        }
+      } catch (err) {
+        console.error("⚠️ AI Intelligence error:", err);
+        enhancedPrompt = ""; // Fallback to basic mode
+      }
+    }
+
     const contextPrompt = buildContextPrompt();
 
     // Build messages array
     const messages = [
-      { role: "system", content: SYSTEM_PROMPT + contextPrompt },
+      {
+        role: "system",
+        content: SYSTEM_PROMPT + contextPrompt + enhancedPrompt,
+      },
       ...history
         .slice(-30)
         .map((msg) => ({
@@ -703,8 +657,8 @@ async function getMashaResponse() {
     const chatCompletion = await openai.chat.completions.create({
       messages: messages,
       model: "google/gemini-2.0-flash-lite-001",
-      temperature: 0.8,
-      max_tokens: 200,
+      temperature: temperature,
+      max_tokens: maxTokens,
       top_p: 0.9,
     });
 
@@ -712,8 +666,22 @@ async function getMashaResponse() {
     typingIndicator.style.display = "none";
     appendMessage("assistant", mashaReply);
 
-    // Speak the response if voice is enabled
-    speak(mashaReply);
+    // Log AI learning insights (if AI intelligence enabled)
+    if (aiIntelligenceEnabled && advancedMemory) {
+      try {
+        // Note: guidelines might not exist if AI failed, so we check
+        const lastUserMsg = history[history.length - 1]?.content || "";
+        if (lastUserMsg) {
+          advancedMemory.addInsight(
+            `Response generated for: "${lastUserMsg.substring(0, 50)}..."`,
+            "conversation",
+            0.7
+          );
+        }
+      } catch (err) {
+        console.error("⚠️ Failed to log insight:", err);
+      }
+    }
   } catch (error) {
     console.error("OpenRouter Error:", error);
     typingIndicator.style.display = "none";
@@ -731,7 +699,7 @@ function handleSend() {
   }
 
   appendMessage("user", text);
-  analyzeContext(text);
+  const aiAnalysis = analyzeContext(text); // Now captures AI analysis
   userInput.value = "";
   getMashaResponse();
 }
