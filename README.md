@@ -90,7 +90,10 @@ Masha adalah AI chatbot dengan karakteristik:
 - Perfect photographic memory
 - Natural Indonesian language
 - Bestie vibes (bukan romantic)
+- Awas jadi kesel sendiri
 
 ---
+
+Note: kode ini bantu pembuatannya dengan menggunakan AI tidak 100% buatan manusia
 
 Made with ❤️ by Mila/Kuru

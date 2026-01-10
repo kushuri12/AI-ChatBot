@@ -1,0 +1,500 @@
+{
+  "entities": {
+    "people": {},
+    "places": {},
+    "things": {},
+    "events": {}
+  },
+  "emotionalProfile": {
+    "dominantMoods": [
+      {
+        "mood": "angry",
+        "frequency": 18,
+        "lastSeen": "2026-01-10T10:38:14.389Z"
+      },
+      {
+        "mood": "content",
+        "frequency": 4,
+        "lastSeen": "2026-01-10T09:47:36.134Z"
+      },
+      {
+        "mood": "sad",
+        "frequency": 4,
+        "lastSeen": "2026-01-10T09:58:41.859Z"
+      },
+      {
+        "mood": "anxious",
+        "frequency": 2,
+        "lastSeen": "2026-01-10T09:38:41.106Z"
+      }
+    ],
+    "triggers": {
+      "positive": [],
+      "negative": [],
+      "neutral": []
+    },
+    "patterns": {
+      "morningMood": "unknown",
+      "afternoonMood": "unknown",
+      "eveningMood": "angry",
+      "nightMood": "unknown"
+    },
+    "responsePreferences": {
+      "longResponses": 0,
+      "joking": 0,
+      "supportive": 0,
+      "direct": 0
+    }
+  },
+  "topicGraph": {
+    "hobby": {
+      "relatedTopics": [],
+      "frequency": 2,
+      "sentiment": "neutral",
+      "keywords": [],
+      "firstMentioned": "2026-01-10T10:36:57.644Z",
+      "lastDetails": {
+        "context": "yaampun gabisa baca tolol bgt",
+        "timestamp": "2026-01-10T10:37:10.464Z"
+      },
+      "lastMentioned": "2026-01-10T10:37:10.464Z"
+    }
+  },
+  "conversationPatterns": {
+    "averageMessageLength": 9.966101694915254,
+    "typingStyle": "mixed",
+    "commonPhrases": {
+      "gw mau ngomong": 1,
+      "ini apa tu": 1,
+      "ya gini nah": 1,
+      "gitu dan gini": 1,
+      "cringe juga lu": 1,
+      "user sent sticker": 10,
+      "typo lu keras": 1,
+      "masi sore padahal": 1,
+      "ga gimn gimn": 1,
+      "ga di jwb": 1,
+      "ya karna gabut": 1,
+      "ga di jawab": 1,
+      "kena mental ya": 1,
+      "gw hapus juuga": 1,
+      "wkwk berani juga": 1,
+      "btw lu kayak": 1,
+      "chat lu nohn": 1,
+      "gada feminim nya": 1,
+      "cool bet soalnya": 1,
+      "wwkwkkw kesel ya": 1,
+      "marah lu hah": 1,
+      "ampe berani ngetik": 1,
+      "lu siapa btw": 1,
+      "lah nanya balik": 1,
+      "oh jelek ya": 1,
+      "bruh nama lu": 1,
+      "emg siapa lupa": 1,
+      "o yg jelek": 1,
+      "bener kan nama": 1,
+      "nama lo sebut": 1,
+      "ya nama lo": 1,
+      "berani lo kesel": 1,
+      "sama raja iblis": 1,
+      "gw kill lu": 1,
+      "kasar lu sm": 1,
+      "halo gw kangen": 1,
+      "kangen aja gaboleh": 1,
+      "ya kangen gaboleh": 1,
+      "maaf maaf jangan": 1,
+      "jangan ngambek dong": 1,
+      "ga lagi lagi": 1,
+      "jangan di read": 1,
+      "maaf aku minta": 1,
+      "woi jnagan gitu": 1,
+      "urgent nih kangen": 1,
+      "soalnya gw ama": 1,
+      "kok gitu sih": 1,
+      "huuuu nangis gw": 1,
+      "kangen aja sama": 1,
+      "ke imutan mu": 1,
+      "iya iya maaf": 1,
+      "ga respek 1": 1,
+      "males amat dh": 1,
+      "i gip u": 1,
+      "lucu aja kamu": 1,
+      "luuc tete nya": 1,
+      "tumben gitu jwb": 1,
+      "nah tu ngaku": 1,
+      "wkwk ngaku gaje": 1,
+      "apasih jwban lu": 1,
+      "tumben jawb gitu": 1,
+      "tapi tuh jawb": 1,
+      "lu yg apa": 1,
+      "di bilang anak": 1,
+      "berarti anak jahat": 1,
+      "jawab dong jangan": 1,
+      "arti kayak salam": 1,
+      "nangis aja sono": 3,
+      "nangis sono kyak": 1,
+      "ya ga di": 1,
+      "tai lu yatim": 1,
+      "wkwk cewe kasar": 1,
+      "lu tuh yg": 1,
+      "yaampun gabisa baca": 1,
+      "lah tolol di": 1,
+      "kesel nih wkwkw": 1,
+      "kalo mudh kesel": 1,
+      "jadi bayi sono": 1,
+      "cepet bgt berubah": 1,
+      "lu yg gajelas": 1,
+      "maaf maaf gw": 1,
+      "cuma tes lu": 1,
+      "tadi gabut soalnya": 1,
+      "maaf in dong": 1
+    },
+    "questionFrequency": 17,
+    "responseTime": "medium",
+    "conversationStarters": []
+  },
+  "activeGoals": [
+    {
+      "goal": "gw mau ngomong",
+      "startDate": "2026-01-10T09:28:01.018Z",
+      "mentions": 1,
+      "progress": "started",
+      "relatedTopics": []
+    },
+    {
+      "goal": "di bilang anak baik gamau",
+      "startDate": "2026-01-10T10:30:25.226Z",
+      "mentions": 1,
+      "progress": "started",
+      "relatedTopics": []
+    }
+  ],
+  "completedGoals": [],
+  "preferences": {
+    "favoriteTopics": [],
+    "avoidTopics": [],
+    "timePreferences": {
+      "morning": 0,
+      "afternoon": 0,
+      "evening": 0,
+      "night": 0
+    }
+  },
+  "relationship": {
+    "intimacyLevel": 4.200000000000003,
+    "trustLevel": 4.590000000000001,
+    "humor": 5,
+    "respectLevel": 10,
+    "conversationComfort": 5
+  },
+  "learningLog": [
+    {
+      "timestamp": "2026-01-10T10:30:14.242Z",
+      "insight": "Response generated for: \"apaan si geuleuh...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:30:28.409Z",
+      "insight": "Response generated for: \"ya emang...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:30:36.846Z",
+      "insight": "Response generated for: \"serah lu dah...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:30:46.839Z",
+      "insight": "Response generated for: \"knp si ketawa...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:32:25.394Z",
+      "insight": "Response generated for: \"wkwkkwkw...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:32:39.165Z",
+      "insight": "Response generated for: \"siapa yg ngambek elah...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:32:47.075Z",
+      "insight": "Response generated for: \"dih gr...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:32:52.141Z",
+      "insight": "Response generated for: \"apaan si...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:34:17.793Z",
+      "insight": "Response generated for: \"p apaan dah...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:34:30.802Z",
+      "insight": "Response generated for: \"ya ga gitu juga anjir............\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:34:37.632Z",
+      "insight": "Response generated for: \"ya trus knp si...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:34:43.735Z",
+      "insight": "Response generated for: \"yaudah si...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:34:49.081Z",
+      "insight": "Response generated for: \"anjing ngapain ngomong gitu...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:34:56.557Z",
+      "insight": "Response generated for: \"maksud lu apaan ngmg gitu bangsat...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:34:59.028Z",
+      "insight": "Response generated for: \"serah lu dah anjing...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:35:15.209Z",
+      "insight": "Response generated for: \"najis ogah...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:35:17.752Z",
+      "insight": "Response generated for: \"najis alay bgt ew...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:35:22.757Z",
+      "insight": "Response generated for: \"lu tuh ya...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:35:26.535Z",
+      "insight": "Response generated for: \"serah...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:35:31.841Z",
+      "insight": "Response generated for: \"yatim piatu...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:35:41.782Z",
+      "insight": "Response generated for: \"ya trus ngapain ngmng...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:35:49.654Z",
+      "insight": "Response generated for: \"wkwkwk ngakak bgt gua anjir...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:35:54.065Z",
+      "insight": "Response generated for: \"serah lu dah anjing...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:36:03.626Z",
+      "insight": "Response generated for: \"biarin wleee...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:36:14.008Z",
+      "insight": "Response generated for: \"ya trus kenapa emang...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:36:30.814Z",
+      "insight": "Response generated for: \"🙄...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:36:40.052Z",
+      "insight": "Response generated for: \"apa si...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:36:47.856Z",
+      "insight": "Response generated for: \"hah...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:36:54.009Z",
+      "insight": "Response generated for: \"hah hoh...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:36:59.499Z",
+      "insight": "Response generated for: \"ya trus kenapa emang...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:37:12.303Z",
+      "insight": "Response generated for: \"serah gua lah...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:37:44.160Z",
+      "insight": "Response generated for: \"bct ah...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:37:51.769Z",
+      "insight": "Response generated for: \"wkwk trus gua hrs gmn...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:37:59.554Z",
+      "insight": "Response generated for: \"yaudah si...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:38:05.910Z",
+      "insight": "Response generated for: \"ya trs?...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:38:16.342Z",
+      "insight": "Response generated for: \"serah gua lah......\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:38:21.710Z",
+      "insight": "Response generated for: \"apaan si lu...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:38:26.739Z",
+      "insight": "Response generated for: \"😂...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:38:35.596Z",
+      "insight": "Response generated for: \"ya trs masalah buat lu?...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:38:43.103Z",
+      "insight": "Response generated for: \"hobby: yaampun gabisa baca tolol bgt...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:38:52.148Z",
+      "insight": "Response generated for: \"apaan anjg anjg, gajelas bgt idup lu...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:39:00.945Z",
+      "insight": "Response generated for: \"lah trs gua hrs gmn biar jelas di mata lu yg maha ...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:39:11.659Z",
+      "insight": "Response generated for: \"wkwk ngambek...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:39:19.001Z",
+      "insight": "Response generated for: \"👍...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:39:31.296Z",
+      "insight": "Response generated for: \"yauda si...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:39:44.350Z",
+      "insight": "Response generated for: \"serah lu dah...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:39:55.723Z",
+      "insight": "Response generated for: \"males...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:40:04.959Z",
+      "insight": "Response generated for: \"ga...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:40:12.228Z",
+      "insight": "Response generated for: \"ga mau titik...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    },
+    {
+      "timestamp": "2026-01-10T10:48:31.816Z",
+      "insight": "Response generated for: \"ga bakal...\"",
+      "category": "conversation",
+      "confidence": 0.7
+    }
+  ],
+  "meta": {
+    "totalConversations": 0,
+    "totalMessages": 236,
+    "firstInteraction": "2026-01-10T09:27:50.896Z",
+    "lastInteraction": "2026-01-10T10:48:29.513Z",
+    "version": "3.0"
+  },
+  "pinnedMemories": []
+}

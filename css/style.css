@@ -137,6 +137,136 @@ body {
   color: white;
   border-bottom-right-radius: 4px;
   box-shadow: 0 4px 15px rgba(255, 133, 162, 0.2);
+  position: relative;
+}
+
+/* Message Actions (WhatsApp Desktop - Outside bubble) */
+.message-actions {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: calc(100% + 8px); /* Right side of AI message */
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.message-user .message-actions {
+  left: auto;
+  right: calc(100% + 8px); /* Left side of user message */
+}
+
+.message:hover .message-actions {
+  opacity: 1;
+}
+
+.message-actions-btn {
+  background: rgba(0, 0, 0, 0.15);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.message-user .message-actions-btn {
+  background: rgba(0, 0, 0, 0.2);
+  color: #333;
+}
+
+.message-actions-btn:hover {
+  background: rgba(0, 0, 0, 0.3);
+  transform: scale(1.15);
+}
+
+.message-user .message-actions-btn:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Dropdown Menu */
+.message-menu {
+  position: absolute;
+  top: 25px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 4px 0;
+  min-width: 120px;
+  display: none;
+  z-index: 1000;
+}
+
+.message-menu.show {
+  display: block;
+  animation: menuSlideIn 0.15s ease-out;
+}
+
+@keyframes menuSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-menu-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #333;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.message-menu-item:hover {
+  background: #f5f5f5;
+}
+
+.message-menu-item.delete:hover {
+  background: #fee;
+  color: #d32f2f;
+}
+
+.menu-icon {
+  font-size: 1rem;
+}
+
+/* Edited Label */
+.edited-label {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  font-style: italic;
+  margin-left: 4px;
+}
+
+/* Quoted Message (Reply) */
+.quoted-message {
+  font-size: 0.8rem;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  border-left: 3px solid rgba(255, 133, 162, 0.5);
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.message-user .quoted-message {
+  border-left-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .message-sticker {
@@ -145,6 +275,101 @@ body {
   padding: 4px !important;
   background: transparent !important;
   box-shadow: none !important;
+}
+
+/* Emoji-Only Reactions (V5.2 - WhatsApp Style) */
+.message-reaction {
+  font-size: 48px !important;
+  line-height: 1 !important;
+  padding: 8px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  animation: reactionPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes reactionPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Reply Preview (WhatsApp-style) */
+.reply-preview {
+  padding: 12px 20px 8px 20px;
+  background: rgba(255, 133, 162, 0.05);
+  border-top: 1px solid rgba(255, 133, 162, 0.1);
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reply-preview-content {
+  background: white;
+  border-left: 3px solid var(--primary);
+  border-radius: 8px;
+  padding: 8px 12px;
+  position: relative;
+}
+
+.reply-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.reply-preview-label {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reply-preview-close {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f8f9fa;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #999;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.reply-preview-close:hover {
+  background: #fee2e8;
+  color: var(--primary);
+}
+
+.reply-preview-text {
+  font-size: 0.85rem;
+  color: #666;
+  max-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Input Area */
