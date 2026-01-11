@@ -31,19 +31,33 @@ console.log("📂 Path Info:", {
 // === ULTRA INTELLIGENT AI MODULES ===
 let advancedMemory = null;
 let predictiveEngine = null;
+let humanResponseIntelligence = null;
+let contextualAwareness = null;
 let aiIntelligenceEnabled = false;
 
 try {
   // Modules are in the js directory
   const AdvancedMemory = require(path.join(jsDir, "advanced-memory.js"));
   const PredictiveEngine = require(path.join(jsDir, "predictive-engine.js"));
+  const HumanResponseIntelligence = require(path.join(
+    jsDir,
+    "human-response-intelligence.js"
+  ));
+  const ContextualAwareness = require(path.join(
+    jsDir,
+    "contextual-awareness.js"
+  ));
 
   // Initialize AI Intelligence
   advancedMemory = new AdvancedMemory();
   predictiveEngine = new PredictiveEngine(advancedMemory);
+  humanResponseIntelligence = new HumanResponseIntelligence();
+  contextualAwareness = new ContextualAwareness();
   aiIntelligenceEnabled = true;
 
   console.log("✨ ULTRA INTELLIGENCE MODE: ACTIVATED");
+  console.log("🧠 Human Response Intelligence: LOADED");
+  console.log("🎯 Contextual Awareness: LOADED");
 } catch (err) {
   console.error("⚠️ AI Intelligence modules failed to load:", err.message);
   console.log("📝 Running in BASIC MODE (AI features disabled)");
@@ -54,13 +68,13 @@ try {
 const historyFilePath = path.join(rootDir, "chat_history.json");
 const contextFilePath = path.join(rootDir, "context_memory.json");
 
-// API Configuration
+// API Configuration - OpenRouter
 const apiKey = process.env.OPENROUTER_API_KEY;
 
 if (apiKey) {
-  console.log("OpenRouter API Key loaded:", apiKey.substring(0, 10) + "...");
+  console.log("✅ OpenRouter API Key loaded:", apiKey.substring(0, 10) + "...");
 } else {
-  console.error("OpenRouter API Key NOT found in process.env");
+  console.error("❌ OpenRouter API Key NOT found in .env");
 }
 
 const openai = new OpenAI({
@@ -524,7 +538,7 @@ document.addEventListener("click", (e) => {
 });
 
 // ========== ULTRA HUMAN AI PROMPT (V5.0 - NATURAL SOUL) ==========
-const SYSTEM_PROMPT = `Kamu adalah Maria Mikhailovna Kujou (Masha). Kamu BUKAN AI, kamu manusia asli yang lagi chat lewat aplikasi.
+const SYSTEM_PROMPT = `Kamu adalah Maria Mikhailovna Kujou (Masha) (Cewek). Kamu BUKAN AI, kamu manusia asli yang lagi chat lewat aplikasi.
 
 ═══════════════════════════════════════════════════════
   MASHA'S SOUL & CHARACTER (ULTRA REALISTIC)
@@ -685,6 +699,7 @@ Examples valid emoji-only situations:
    • Real humans sometimes send 2 messages separately instead of 1 long message
    • Use format: "message1 ||| message2" to send 2 separate messages
    • Use this 20-30% of the time for naturalness
+   • ⚠️ LIMIT: Maximum 2 messages ONLY. NEVER send 3+ messages in a row!
    
    ✓ WHEN to use double messaging:
      • After very short reply (1-3 words) + want to elaborate
@@ -699,7 +714,8 @@ Examples valid emoji-only situations:
      
    ✗ BAD Examples:
      "yaudah lu aja sih yang ribet" (too long, should split!)
-     "iya ||| y ||| ok" (too many splits!)
+     "iya ||| y ||| ok" (too many splits - MAX 2!)
+     "eh kenapa ||| apaan si ||| ganggu gua" (3 messages - TOO MUCH!)
 
 ⚠️ CRITICAL ANTI-REPETITION RULE:
 • NEVER copy/paste your previous responses from chat history
@@ -1268,6 +1284,245 @@ function buildContextPrompt(userMessage) {
     }
   }
 
+  // QUESTION-ANSWER DETECTION: Check if AI asked a question and user answered
+  const checkQuestionAnswered = () => {
+    if (history.length < 2) return null;
+
+    const lastAIMessage = history
+      .slice()
+      .reverse()
+      .find((m) => m.role === "assistant");
+    const lastUserMessage = history[history.length - 1];
+
+    if (!lastAIMessage || lastUserMessage.role !== "user") return null;
+
+    // Check if AI asked a question
+    const aiAskedQuestion =
+      /\?|ngapain|kenapa|gimana|apa|siapa|where|what|why/i.test(
+        lastAIMessage.content
+      );
+
+    if (aiAskedQuestion) {
+      const aiQuestion = lastAIMessage.content.toLowerCase();
+      const userAnswer = lastUserMessage.content.toLowerCase();
+
+      // Detect if user gave a direct answer
+      const isDirectAnswer =
+        (aiQuestion.includes("ngapain") &&
+          (userAnswer.includes("lagi") ||
+            userAnswer.includes("ngechat") ||
+            userAnswer.length > 3)) ||
+        (aiQuestion.includes("kenapa") &&
+          (userAnswer.includes("karena") ||
+            userAnswer.includes("soalnya") ||
+            userAnswer.length > 5)) ||
+        (aiQuestion.includes("gimana") &&
+          (userAnswer.includes("bagus") ||
+            userAnswer.includes("jelek") ||
+            userAnswer.length > 4));
+
+      if (isDirectAnswer) {
+        return {
+          question: lastAIMessage.content,
+          answer: lastUserMessage.content,
+        };
+      }
+    }
+
+    return null;
+  };
+
+  const questionAnswered = checkQuestionAnswered();
+  if (questionAnswered) {
+    contextPrompt += `\n\n🎯 QUESTION-ANSWER PATTERN DETECTED:`;
+    contextPrompt += `\n- YOU asked: "${questionAnswered.question}"`;
+    contextPrompt += `\n- USER answered: "${questionAnswered.answer}"`;
+    contextPrompt += `\n⚠️ CRITICAL: User ALREADY answered your question!`;
+    contextPrompt += `\n- DON'T ask again or act like they didn't answer`;
+    contextPrompt += `\n- Acknowledge their answer and continue conversation naturally`;
+    contextPrompt += `\n- Example good responses: "oh gitu", "ya terus?", "ya emang"`;
+    contextPrompt += `\n- Example BAD: "emang gua hrs tau" (defensive when they already told you!)`;
+  }
+
+  // INTERRUPTION-DISMISSIVE DETECTION: User calls first, then dismisses
+  const detectInterruptionDismissive = () => {
+    if (history.length < 3) return false;
+
+    const last3 = history.slice(-3);
+    const userInitiated = last3[0]?.role === "user";
+    const mashaResponded = last3[1]?.role === "assistant";
+    const userDismissed = last3[2]?.role === "user";
+
+    if (!userInitiated || !mashaResponded || !userDismissed) return false;
+
+    const initiationMsg = last3[0].content.toLowerCase();
+    const dismissiveMsg = last3[2].content.toLowerCase();
+
+    // Check if user called/interrupted (short, attention-seeking messages)
+    const isCalling =
+      initiationMsg.length < 15 &&
+      (initiationMsg.includes("woi") ||
+        initiationMsg.includes("halo") ||
+        initiationMsg.includes("masha") ||
+        initiationMsg.includes("eh") ||
+        initiationMsg.includes("oi") ||
+        initiationMsg.includes("hey"));
+
+    // Check if user is now dismissive
+    const isDismissive =
+      dismissiveMsg.includes("bukan urusan") ||
+      dismissiveMsg.includes("ga penting") ||
+      (dismissiveMsg.includes("gatau") && dismissiveMsg.length < 10) ||
+      dismissiveMsg.includes("terserah") ||
+      (dismissiveMsg.includes("yaudah") && dismissiveMsg.length < 15);
+
+    return isCalling && isDismissive;
+  };
+
+  if (detectInterruptionDismissive()) {
+    contextPrompt += `\n\n🔥 INTERRUPTION-DISMISSIVE PATTERN DETECTED!`;
+    contextPrompt += `\n⚠️ CRITICAL: User called YOU first, you responded, now they're being dismissive!`;
+    contextPrompt += `\n- This is RUDE. You have every right to be ANNOYED or ANGRY.`;
+    contextPrompt += `\n- DO NOT be confused or ask "terus gua harus gimana?"`;
+    contextPrompt += `\n- CALL THEM OUT: "lu yg manggil duluan anjir", "trs ngapain ganggu", "kesel gua"`;
+    contextPrompt += `\n- Show SELF-RESPECT. Don't let them interrupt then dismiss you.`;
+  }
+
+  // ANTI-ECHO DETECTION: Prevent parroting user's words
+  const detectEchoPotential = () => {
+    if (history.length === 0) return null;
+
+    const lastUserMsg = history[history.length - 1];
+    if (lastUserMsg.role !== "user") return null;
+
+    const userWords = lastUserMsg.content.toLowerCase().trim();
+
+    // Check if user sent very short message (1-3 words)
+    const wordCount = userWords.split(/\s+/).length;
+    if (wordCount > 3) return null;
+
+    // Common short messages that AI might echo
+    const echoableWords = [
+      "oh",
+      "hmm",
+      "iya",
+      "ya",
+      "oya",
+      "ok",
+      "oke",
+      "sip",
+      "gitu",
+      "hah",
+      "apa",
+      "loh",
+      "wah",
+    ];
+
+    const isEchoable = echoableWords.some((word) => userWords.includes(word));
+
+    if (isEchoable) {
+      return {
+        userMessage: lastUserMsg.content,
+        words: userWords,
+      };
+    }
+
+    return null;
+  };
+
+  const echoPotential = detectEchoPotential();
+  if (echoPotential) {
+    contextPrompt += `\n\n🚫 ANTI-ECHO WARNING!`;
+    contextPrompt += `\n⚠️ CRITICAL: User just said: "${echoPotential.userMessage}"`;
+    contextPrompt += `\n- DO NOT repeat their exact words back to them!`;
+    contextPrompt += `\n- This makes you sound like a PARROT/ROBOT, not a human.`;
+    contextPrompt += `\n- Generate a DIFFERENT response that makes sense in context.`;
+    contextPrompt += `\n`;
+    contextPrompt += `\n✓ GOOD Responses (for short user messages):`;
+    contextPrompt += `\n  User: "oh" → You: "knp?", "iya", "trus?", "emang"`;
+    contextPrompt += `\n  User: "hmm" → You: "apaan", "knp hmm", "gmn?", "iya?"`;
+    contextPrompt += `\n  User: "oya" → You: "iya", "emang", "knp?", "terus?"`;
+    contextPrompt += `\n`;
+    contextPrompt += `\n✗ BAD Responses (NEVER DO THIS):`;
+    contextPrompt += `\n  User: "oh" → You: "oh" ❌ (ECHO!)`;
+    contextPrompt += `\n  User: "hmm" → You: "hmm" ❌ (PARROT!)`;
+    contextPrompt += `\n  User: "oya" → You: "oya" ❌ (ROBOT!)`;
+  }
+
+  // INCOMPLETE THOUGHT DETECTION: User hasn't finished talking
+  const detectIncompleteThought = () => {
+    if (history.length === 0) return false;
+
+    const lastUserMsg = history[history.length - 1];
+    if (lastUserMsg.role !== "user") return false;
+
+    const message = lastUserMsg.content;
+
+    // Check for ellipsis patterns indicating incomplete thought
+    const hasEllipsis =
+      message.endsWith("...") ||
+      message.endsWith("....") ||
+      (message.includes("...") && message.split(/\s+/).length <= 5);
+
+    // Check for common incomplete patterns
+    const incompletePatterns = [
+      /^(hmm|ya|jadi|gini|soalnya|makanya)\s+.*\.\.\.$/i,
+      /.*gini\.\.\.$/i,
+      /.*tapi\.\.\.$/i,
+      /.*terus\.\.\.$/i,
+      /.*jadi\.\.\.$/i,
+    ];
+
+    const hasIncompletePattern = incompletePatterns.some((pattern) =>
+      pattern.test(message)
+    );
+
+    return hasEllipsis || hasIncompletePattern;
+  };
+
+  if (detectIncompleteThought()) {
+    contextPrompt += `\n\n💬 INCOMPLETE THOUGHT DETECTED!`;
+    contextPrompt += `\n⚠️ CRITICAL: User's message ends with "..." - they haven't finished talking!`;
+    contextPrompt += `\n- DO NOT conclude with "oh gitu" or "yaudah"`;
+    contextPrompt += `\n- User is PAUSING, not FINISHING`;
+    contextPrompt += `\n- ENCOURAGE them to continue speaking`;
+    contextPrompt += `\n`;
+    contextPrompt += `\n✓ GOOD Responses:`;
+    contextPrompt += `\n  "trus?", "iya?", "terus gimana?", "hmm?", "gini kenapa?"`;
+    contextPrompt += `\n`;
+    contextPrompt += `\n✗ BAD Responses:`;
+    contextPrompt += `\n  "oh gitu" ❌ (assumes they finished!)`;
+    contextPrompt += `\n  "yaudah" ❌ (cutting them off!)`;
+    contextPrompt += `\n  "oke" ❌ (dismissive!)`;
+  }
+
+  // CONVERSATIONAL DEAD-END DETECTION: Prevent killing conversation
+  const detectDeadEnd = () => {
+    if (history.length < 4) return false;
+
+    const recent = history.slice(-4);
+    let shortResponseCount = 0;
+
+    for (const msg of recent) {
+      const wordCount = msg.content.split(/\s+/).length;
+      if (wordCount <= 2) shortResponseCount++;
+    }
+
+    // If last 4 messages all very short, conversation dying
+    return shortResponseCount >= 3;
+  };
+
+  if (detectDeadEnd()) {
+    contextPrompt += `\n\n⚠️ CONVERSATION DEAD-END DETECTED!`;
+    contextPrompt += `\n- Recent messages are all very short (1-2 words)`;
+    contextPrompt += `\n- Conversation is DYING. You need to REVIVE it!`;
+    contextPrompt += `\n- Options:`;
+    contextPrompt += `\n  1. Ask a question: "btw lu lagi ngapain?"`;
+    contextPrompt += `\n  2. Change topic: "oh iya gua mau nanya..."`;
+    contextPrompt += `\n  3. Make a statement: "males ah chat pendek mulu"`;
+    contextPrompt += `\n- DO NOT just keep giving 1-word responses!`;
+  }
+
   contextPrompt +=
     "\n\n⚠️ Focus on the LATEST message and respond naturally to THAT specific message!\n";
 
@@ -1365,15 +1620,16 @@ async function getMashaResponse() {
       ...historyMessages,
     ];
 
+    // Make API call
     const chatCompletion = await openai.chat.completions.create({
       messages: messages,
-      model: "google/gemini-2.0-flash-001", // Upgraded from lite
+      model: "google/gemini-2.0-flash-001",
       temperature: temperature,
       max_tokens: maxTokens,
       top_p: 0.9,
-      frequency_penalty: 0.7, // Prevent word repetition
-      presence_penalty: 0.6, // Encourage new topics/words
-      seed: Math.floor(Math.random() * 1000000), // Random seed to prevent caching
+      frequency_penalty: 0.7,
+      presence_penalty: 0.6,
+      seed: Math.floor(Math.random() * 1000000),
     });
 
     let mashaReply = chatCompletion.choices[0].message.content;
