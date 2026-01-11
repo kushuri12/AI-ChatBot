@@ -161,95 +161,112 @@ body {
 }
 
 .message-actions-btn {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.25);
   border: none;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;
-  font-size: 16px;
+  color: #1a1a1a;
+  font-size: 18px;
   font-weight: bold;
   transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .message-user .message-actions-btn {
-  background: rgba(0, 0, 0, 0.2);
-  color: #333;
+  background: rgba(255, 255, 255, 0.35);
+  color: #1a1a1a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .message-actions-btn:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .message-user .message-actions-btn:hover {
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.5);
 }
 
 /* Dropdown Menu */
 .message-menu {
   position: absolute;
-  top: 25px;
+  top: 30px;
   right: 0;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 4px 0;
-  min-width: 120px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  padding: 6px 0;
+  min-width: 140px;
   display: none;
   z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Fix AI message menu - expand to right, not left */
+.message-ai .message-menu {
+  left: 0;
+  right: auto;
 }
 
 .message-menu.show {
   display: block;
-  animation: menuSlideIn 0.15s ease-out;
+  animation: menuSlideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes menuSlideIn {
   from {
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translateY(-8px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-.message-menu-item {
-  padding: 8px 16px;
+.message-menu-item,
+.message-menu-item-user {
+  padding: 10px 16px;
   cursor: pointer;
   font-size: 0.9rem;
-  color: #333;
-  transition: background 0.2s;
+  color: #1a1a1a;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  font-weight: 500;
 }
 
 .message-menu-item:hover {
-  background: #f5f5f5;
+  background: #f8f9fa;
+  color: var(--primary);
 }
 
 .message-menu-item.delete:hover {
-  background: #fee;
+  background: #fee2e8;
   color: #d32f2f;
 }
 
 .menu-icon {
-  font-size: 1rem;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
 }
 
 /* Edited Label */
 .edited-label {
-  font-size: 0.7rem;
-  opacity: 0.6;
+  font-size: 0.75rem;
+  opacity: 0.7;
   font-style: italic;
-  margin-left: 4px;
+  margin-left: 6px;
+  color: inherit;
+  font-weight: 500;
 }
 
 /* Quoted Message (Reply) */

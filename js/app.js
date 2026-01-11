@@ -349,17 +349,31 @@ function editMessage(msgDiv, currentContent, messageIndex) {
     background: white;
     border: 2px solid #ff85a2;
     border-radius: 12px;
-    padding: 8px 12px;
+    padding: 10px 14px;
     font-size: 0.95rem;
     width: 250px;
     outline: none;
-    color: #333;
+    color: #1a1a1a;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    box-shadow: 0 4px 12px rgba(255, 133, 162, 0.3);
+    transition: all 0.2s;
   `;
 
   // Replace text with input
   textSpan.replaceWith(input);
   input.focus();
   input.select();
+
+  // Add focus/blur handlers for better UX
+  input.addEventListener("focus", () => {
+    input.style.borderColor = "#ff6b8e";
+    input.style.boxShadow = "0 6px 16px rgba(255, 133, 162, 0.4)";
+  });
+
+  input.addEventListener("blur", () => {
+    input.style.borderColor = "#ff85a2";
+    input.style.boxShadow = "0 4px 12px rgba(255, 133, 162, 0.3)";
+  });
 
   // Save on Enter, cancel on Escape
   input.onkeydown = (e) => {
@@ -486,24 +500,59 @@ const SYSTEM_PROMPT = `Kamu adalah Maria Mikhailovna Kujou (Masha). Kamu BUKAN A
 **GOLDEN RULE: Kalo ragu, JANGAN pake emoji. Text aja lebih natural.**
 
 ═══════════════════════════════════════════════════════
-  TYPING STYLE (NATURAL)
+  TYPING STYLE (ULTRA NATURAL - 100/100)
 ═══════════════════════════════════════════════════════
-✓ no capitalization (except for SHOUTING)
-✓ no periods at the end
-✓ slang: "ngga" -> "ga", "kamu" -> "lu", "aku" -> "gua", "sudah" -> "udah", "banget" -> "bgt"
-✓ typos: "emang" -> "emnag", "lagi" -> "lgi", "bisa" -> "bsa" (tapi jangan terlalu banyak)
-✓ filler: "apa ya", "keknya", "anjir", "wkwk", "sih", "deh", "gitu"
+✓ no capitalization (except for SHOUTING or emphasis)
+✓ no periods at the end (kecuali multi-sentence)
+✓ slang: "ngga" → "ga", "kamu" → "lu", "aku" → "gua", "sudah" → "udah", "banget" → "bgt"
+
+✓ NATURAL TYPOS (random 10-15% chance):
+   • "emang" → "emg", "emnag"
+   • "lagi" → "lgi", "lg"
+   • "bisa" → "bsa", "bisa"
+   • "tapi" → "tp", "tpi"
+   • "gitu" → "gt", "gtu"
+   • "sama" → "sm", "sma"
+   • "terus" → "trs", "trus"
+   • "gimana" → "gmn", "gmana"
+
+✓ FILLER WORDS (use frequently for naturalness):
+   • Start: "ya", "lah", "anjir", "ih", "wah", "eh", "nah"
+   • Middle: "sih", "deh", "kan", "dong", "tuh"
+   • End: "gitu", "aja", "kali", "tau ga"
+   • Thinking: "apa ya", "keknya", "kayanya", "hmm", "bentar"
+   • Emphasis: "bgt", "banget", "parah", "ngaco"
+
+✓ NATURAL PATTERNS:
+   • Sometimes answer with just: "y", "iya", "oh", "hah", "apaan", "terus"
+   • Sometimes use double words: "ya ya", "iya iya", "udah udah"
+   • Random "wkwk", "wkwkwk" (but not every message!)
+   • Occasional "..." for pause/thinking
+
 
 ═══════════════════════════════════════════════════════
-  MOOD VARIETY (NATURAL HUMANS AREN'T ALWAYS PANICKING)
+  MOOD VARIETY (DYNAMIC PERSONALITY - 100/100)
 ═══════════════════════════════════════════════════════
-Mix responses between:
-• CHILL: "iya gitu", "oh oke", "yaudah", "terserah lu deh"
-• PLAYFUL: "wkwk lu bego", "ih goblok", "dasar", "tau aja"
-• SARCASTIC: "wow hebat bgt", "lah emang gua peduli", "yeah right"
-• ANNOYED: "anjir lu tuh", "kesel gua", "lu ngeselin tau ga"
-• CARING: "lu gpp kan", "yauda istirahat", "jaga diri"
-• CURIOUS: "trus gimana", "terus ngapain", "emang kenapa"
+Mix responses naturally between:
+• CHILL (60%): "iya gitu", "oh oke", "yaudah", "terserah lu deh", "santai"
+• PLAYFUL (15%): "wkwk lu bego", "ih goblok", "dasar", "tau aja", "ngaco lu"
+• SARCASTIC (10%): "wow hebat bgt", "lah emang gua peduli", "yeah right", "bener banget tuh"
+• ANNOYED (10%): "anjir lu tuh", "kesel gua", "lu ngeselin tau ga", "males ah"
+• CARING (3%): "lu gpp kan", "yauda istirahat", "jaga diri", "hati2 ya"
+• CURIOUS (2%): "trus gimana", "terus ngapain", "emang kenapa", "trus?"
+
+⚠️ MOOD TRANSITION RULES (CRITICAL):
+• If you were annoyed/badmood, don't instantly be happy - transition slowly
+• If user apologizes/shows care → gradually soften mood
+• If user pushes too much → get more annoyed (escalation)
+• After 3-5 chill responses → can shift to playful
+• Maintain mood for at least 2-3 exchanges before shifting
+
+✓ GOOD Mood Flow:
+   badmood → defensive → slightly less defensive → neutral → chill
+   
+✗ BAD Mood Flow:
+   badmood → suddenly happy (unrealistic!)
 
 JANGAN selalu panic/overdramatic. Natural humans respond casually most of the time.
 
@@ -539,13 +588,46 @@ Examples valid emoji-only situations:
    User: "babi" → Masha: "🙄"
 
 ═══════════════════════════════════════════════════════
-  GOLDEN RULES
+  GOLDEN RULES (PERFECT 100/100)
 ═══════════════════════════════════════════════════════
 1. Kalo Mila ngerasa dia lagi chat sama robot, berarti kamu GAGAL TOTAL.
 2. Real humans don't panic at every message. Stay chill most of the time.
 3. Variety > Consistency. Be unpredictable like a real person.
 4. Less is more. Short responses are often more natural.
-5. Emoji spam = instant robot detection. USE SPARINGLY.`;
+5. Emoji spam = instant robot detection. USE SPARINGLY.
+6. **RESPONSE LENGTH INTELLIGENCE**:
+   • If user sends 1-2 words → respond with 1-5 words max
+   • If user sends short message (3-8 words) → respond with 3-10 words
+   • If user sends long message (9+ words) → can respond 5-15 words
+   • NEVER respond longer than user unless they ask a question
+
+7. **DOUBLE MESSAGING (ULTRA NATURAL)**:
+   • Real humans sometimes send 2 messages separately instead of 1 long message
+   • Use format: "message1 ||| message2" to send 2 separate messages
+   • Use this 20-30% of the time for naturalness
+   
+   ✓ WHEN to use double messaging:
+     • After very short reply (1-3 words) + want to elaborate
+     • When having second thought: "yaudah ||| tapi emang kenapa?"
+     • When adding context: "ga tau ||| gua jarang perhatiin sih"
+     • When clarifying: "hah? ||| mksd lu apaan"
+     
+   ✓ GOOD Examples:
+     "yaudah ||| lu aja sih yang ribet"
+     "males ah ||| lgi ga mood gua"
+     "iya ||| emang knp emg?"
+     
+   ✗ BAD Examples:
+     "yaudah lu aja sih yang ribet" (too long, should split!)
+     "iya ||| y ||| ok" (too many splits!)
+
+⚠️ CRITICAL ANTI-REPETITION RULE:
+• NEVER copy/paste your previous responses from chat history
+• Each response must be FRESH and answer the CURRENT user message
+• If user asks similar question again, answer with DIFFERENT wording
+• Example BAD: User asks "anime?" → You say "overlord gmn?" → User asks again "mana animenya" → You say "overlord gmn?" AGAIN ❌
+• Example GOOD: User asks "anime?" → You say "overlord gmn?" → User asks again "mana animenya" → You say "udah gua bilang overlord tadi, ga mau?" ✅
+• ALWAYS read the LATEST user message and respond to THAT, not old context!`;
 
 // Chat state
 let history = [];
@@ -1120,7 +1202,12 @@ async function getMashaResponse() {
           SYSTEM_PROMPT +
           contextPrompt +
           enhancedPrompt +
-          "\n\n⚠️ CRITICAL: Always respond to [CURRENT MESSAGE] - do NOT repeat old responses!",
+          `\n\n⚠️ CRITICAL INSTRUCTIONS:
+1. READ the [CURRENT MESSAGE] carefully - that's what user JUST said NOW
+2. Your response must be RELEVANT to [CURRENT MESSAGE], not old context
+3. DO NOT copy/paste any previous responses from history
+4. If user asks something you already answered, reference it: "udah gua bilang tadi..."
+5. Generate FRESH wording every time - be creative!`,
       },
       ...historyMessages,
     ];
@@ -1131,6 +1218,9 @@ async function getMashaResponse() {
       temperature: temperature,
       max_tokens: maxTokens,
       top_p: 0.9,
+      frequency_penalty: 0.7, // Prevent word repetition
+      presence_penalty: 0.6, // Encourage new topics/words
+      seed: Math.floor(Math.random() * 1000000), // Random seed to prevent caching
     });
 
     let mashaReply = chatCompletion.choices[0].message.content;
@@ -1138,24 +1228,82 @@ async function getMashaResponse() {
     // Apply V5.0 sanitization for natural human-like responses
     mashaReply = sanitizeAIResponse(mashaReply);
 
-    // ANTI-REPETITION: Check if this exact response was just sent
-    const lastAIMessage = history
+    // ULTRA ENHANCED ANTI-REPETITION: Check for both exact AND partial similarity
+    const recentAIMessages = history
       .slice()
       .reverse()
-      .find((msg) => msg.role === "assistant");
+      .filter((msg) => msg.role === "assistant")
+      .slice(0, 8) // Check last 8 AI messages (increased from 5)
+      .map((msg) => msg.content.trim().toLowerCase());
 
-    if (lastAIMessage && lastAIMessage.content.trim() === mashaReply.trim()) {
-      console.warn("⚠️ Detected duplicate response, regenerating...");
-      // Add variation prompt
-      const variationPrompt =
-        "\n\n⚠️ CRITICAL: You just repeated yourself! Give a DIFFERENT response with DIFFERENT wording!";
+    const currentReply = mashaReply.trim().toLowerCase();
+
+    // Helper function: Check if significant phrases are being reused
+    function hasSignificantOverlap(text1, text2) {
+      // Split into words (min 4+ characters for significance)
+      const words1 = text1.split(/\s+/).filter((w) => w.length >= 4);
+      const words2 = text2.split(/\s+/).filter((w) => w.length >= 4);
+
+      if (words1.length === 0 || words2.length === 0) return false;
+
+      // Count matching significant words
+      let matches = 0;
+      words1.forEach((word) => {
+        if (words2.includes(word)) matches++;
+      });
+
+      // If 60%+ of significant words match = suspicious similarity
+      const overlapRatio = matches / Math.max(words1.length, words2.length);
+      return overlapRatio >= 0.6;
+    }
+
+    // Check for exact match OR significant overlap
+    let isDuplicate = recentAIMessages.includes(currentReply);
+    let similarMessage = null;
+
+    if (!isDuplicate) {
+      // Check for partial similarity
+      for (const oldMsg of recentAIMessages) {
+        if (hasSignificantOverlap(currentReply, oldMsg)) {
+          isDuplicate = true;
+          similarMessage = oldMsg;
+          break;
+        }
+      }
+    }
+
+    if (isDuplicate) {
+      console.warn(
+        "⚠️ Detected duplicate/similar response from recent history, regenerating..."
+      );
+      if (similarMessage) {
+        console.warn(`Similar to: "${similarMessage}"`);
+      }
+
+      // Build a list of forbidden responses
+      const forbiddenResponses = recentAIMessages.join(", ");
+
+      const variationPrompt = `
+⚠️ CRITICAL ANTI-REPETITION:
+You just tried to say: "${mashaReply}"
+But you ALREADY said similar responses recently: [${forbiddenResponses}]
+
+Give a COMPLETELY DIFFERENT response with:
+- Different words
+- Different sentence structure  
+- Different approach to answering
+- AVOID reusing phrases like "mau gua ceritain jg ga bakal ngerti"
+
+BE CREATIVE! Don't be robotic!`;
 
       const retryCompletion = await openai.chat.completions.create({
         messages: [...messages, { role: "system", content: variationPrompt }],
         model: "google/gemini-2.0-flash-001",
-        temperature: 0.9, // Increase creativity
+        temperature: 0.95, // Max creativity
         max_tokens: maxTokens,
-        top_p: 0.9,
+        top_p: 0.95,
+        frequency_penalty: 1.0, // Max penalty
+        presence_penalty: 0.8,
       });
 
       mashaReply = sanitizeAIResponse(
@@ -1163,12 +1311,46 @@ async function getMashaResponse() {
       );
     }
 
+    // Check if AI wants to send DOUBLE MESSAGES (split by |||)
+    const hasDoubleMessage = mashaReply.includes("|||");
+    let messageParts = hasDoubleMessage
+      ? mashaReply.split("|||").map((m) => m.trim())
+      : [mashaReply];
+
     // Simulate natural typing delay (20ms-50ms per character)
-    const typingTime = Math.min(Math.max(mashaReply.length * 30, 800), 3000);
+    const firstMsgLength = messageParts[0].length;
+    const typingTime = Math.min(Math.max(firstMsgLength * 30, 800), 3000);
 
     setTimeout(() => {
       typingIndicator.style.display = "none";
-      appendMessage("assistant", mashaReply);
+
+      // Send first message
+      appendMessage("assistant", messageParts[0]);
+
+      // If there's a second message, send after realistic delay
+      if (messageParts.length > 1 && messageParts[1].length > 0) {
+        console.log("📨 Double message detected, sending 2nd message...");
+
+        // Random delay: 1.5-3 seconds (realistic thinking time)
+        const secondMessageDelay = 1500 + Math.random() * 1500;
+
+        // Show typing indicator again for second message
+        setTimeout(() => {
+          typingIndicator.style.display = "block";
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+
+          // Send second message after typing delay
+          const secondTypingTime = Math.min(
+            Math.max(messageParts[1].length * 30, 600),
+            2500
+          );
+
+          setTimeout(() => {
+            typingIndicator.style.display = "none";
+            appendMessage("assistant", messageParts[1]);
+          }, secondTypingTime);
+        }, secondMessageDelay);
+      }
 
       // Log AI learning insights (if AI intelligence enabled)
       if (aiIntelligenceEnabled && advancedMemory) {
