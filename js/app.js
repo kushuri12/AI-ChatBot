@@ -1226,6 +1226,48 @@ function buildContextPrompt(userMessage) {
     contextPrompt += `\n\n[RECENT CHAT]:\n${recentContext}`;
   }
 
+  // TOPIC COHERENCE: Detect current topic from recent messages
+  const detectCurrentTopic = () => {
+    const recent = history
+      .slice(-5)
+      .map((m) => m.content.toLowerCase())
+      .join(" ");
+
+    // Topic keywords
+    const topics = {
+      game: ["game", "main", "ml", "genshin", "play", "rank", "lose"],
+      bahasa: ["bahasa", "inggris", "english", "ajarin", "belajar"],
+      feeling: ["kesel", "marah", "sedih", "badmood", "seneng", "happy"],
+      anime: ["anime", "manga", "nonton", "watch"],
+      random: ["ngapain", "lagi apa", "bosen"],
+    };
+
+    for (const [topic, keywords] of Object.entries(topics)) {
+      if (keywords.some((kw) => recent.includes(kw))) {
+        return topic;
+      }
+    }
+    return null;
+  };
+
+  const currentTopic = detectCurrentTopic();
+  if (currentTopic) {
+    contextPrompt += `\n\n🎯 CURRENT TOPIC: ${currentTopic}`;
+    contextPrompt += `\n⚠️ CRITICAL: Stay on topic! Don't randomly jump to different subjects!`;
+
+    if (currentTopic === "game") {
+      contextPrompt += `\n- User is discussing games/playing`;
+      contextPrompt += `\n- Keep responses about gaming/that specific game`;
+      contextPrompt += `\n- DON'T suddenly talk about feelings/mood unless user asks`;
+    } else if (currentTopic === "bahasa") {
+      contextPrompt += `\n- User wants to learn language`;
+      contextPrompt += `\n- Stay on language learning topic`;
+    } else if (currentTopic === "feeling") {
+      contextPrompt += `\n- User is sharing feelings/emotions`;
+      contextPrompt += `\n- OK to discuss mood/feelings`;
+    }
+  }
+
   contextPrompt +=
     "\n\n⚠️ Focus on the LATEST message and respond naturally to THAT specific message!\n";
 
@@ -1314,7 +1356,11 @@ async function getMashaResponse() {
 2. Your response must be RELEVANT to [CURRENT MESSAGE], not old context
 3. DO NOT copy/paste any previous responses from history
 4. If user asks something you already answered, reference it: "udah gua bilang tadi..."
-5. Generate FRESH wording every time - be creative!`,
+5. Generate FRESH wording every time - be creative!
+6. 🎯 STAY ON TOPIC - Don't randomly jump to different subjects mid-conversation
+   - If discussing games, keep talking about games
+   - If discussing feelings, keep discussing feelings
+   - Only change topic if user clearly changes it first`,
       },
       ...historyMessages,
     ];
