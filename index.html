@@ -79,8 +79,21 @@
           <h3>Pilih Sticker ✨</h3>
           <div class="close-sticker" id="closeStickerBtn">✕</div>
         </div>
-        <div class="sticker-grid" id="stickerGrid">
-          <!-- Stickers will be generated here by JavaScript -->
+
+        <!-- Sticker Tabs (WhatsApp style) -->
+        <div class="sticker-tabs">
+          <button class="sticker-tab active" data-tab="emoji">😊 Emoji</button>
+          <button class="sticker-tab" data-tab="custom">🖼️ Custom</button>
+        </div>
+
+        <!-- Emoji Stickers -->
+        <div class="sticker-grid active" id="stickerGridEmoji">
+          <!-- Emoji stickers will be generated here by JavaScript -->
+        </div>
+
+        <!-- Custom Stickers -->
+        <div class="sticker-grid" id="stickerGridCustom">
+          <!-- Custom stickers will be generated here by JavaScript -->
         </div>
       </div>
 

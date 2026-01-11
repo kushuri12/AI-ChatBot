@@ -81,7 +81,8 @@ const typingIndicator = document.getElementById("typingIndicator");
 const stickerBtn = document.getElementById("stickerBtn");
 const stickerModal = document.getElementById("stickerModal");
 const closeStickerBtn = document.getElementById("closeStickerBtn");
-const stickerGrid = document.getElementById("stickerGrid");
+const stickerGridEmoji = document.getElementById("stickerGridEmoji");
+const stickerGridCustom = document.getElementById("stickerGridCustom");
 const replyPreview = document.getElementById("replyPreview");
 const replyPreviewText = document.getElementById("replyPreviewText");
 const closeReplyBtn = document.getElementById("closeReplyBtn");
@@ -200,16 +201,79 @@ const stickers = [
   "☕",
 ];
 
-// Generate sticker grid
+// Load custom stickers from sticker folder
+let customStickers = [];
+const stickerDataPath = path.join(rootDir, "sticker", "stickers.json");
+
+try {
+  if (fs.existsSync(stickerDataPath)) {
+    const stickerData = JSON.parse(fs.readFileSync(stickerDataPath, "utf8"));
+    customStickers = stickerData.stickers || [];
+    console.log(`✅ Loaded ${customStickers.length} custom stickers`);
+  }
+} catch (err) {
+  console.warn("⚠️ Failed to load custom stickers:", err.message);
+}
+
+// Generate emoji sticker grid
 stickers.forEach((sticker) => {
   const stickerItem = document.createElement("div");
   stickerItem.className = "sticker-item";
   stickerItem.textContent = sticker;
   stickerItem.addEventListener("click", () => {
-    sendSticker(sticker);
+    sendSticker(sticker, "emoji");
     stickerModal.classList.remove("show");
   });
-  stickerGrid.appendChild(stickerItem);
+  stickerGridEmoji.appendChild(stickerItem); // Append to emoji grid
+});
+
+// Generate custom sticker grid
+customStickers.forEach((sticker) => {
+  const stickerItem = document.createElement("div");
+  stickerItem.className = "sticker-item custom-sticker";
+
+  const img = document.createElement("img");
+  img.src = `sticker/${sticker.filename}`;
+  img.alt = sticker.meaning;
+  img.title = sticker.meaning; // Tooltip shows meaning
+  img.style.cssText = "width: 100%; height: 100%; object-fit: contain;";
+
+  img.onerror = () => {
+    // If image fails to load, show filename instead
+    stickerItem.textContent = sticker.filename;
+    stickerItem.style.fontSize = "10px";
+  };
+
+  stickerItem.appendChild(img);
+  stickerItem.addEventListener("click", () => {
+    sendSticker(sticker, "custom");
+    stickerModal.classList.remove("show");
+  });
+  stickerGridCustom.appendChild(stickerItem); // Append to custom grid
+});
+
+// Tab switching logic (WhatsApp style)
+const stickerTabs = document.querySelectorAll(".sticker-tab");
+const stickerGrids = document.querySelectorAll(".sticker-grid");
+
+stickerTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    const tabName = tab.dataset.tab;
+
+    // Remove active from all tabs
+    stickerTabs.forEach((t) => t.classList.remove("active"));
+    // Add active to clicked tab
+    tab.classList.add("active");
+
+    // Hide all grids
+    stickerGrids.forEach((grid) => grid.classList.remove("active"));
+    // Show selected grid
+    if (tabName === "emoji") {
+      stickerGridEmoji.classList.add("active");
+    } else if (tabName === "custom") {
+      stickerGridCustom.classList.add("active");
+    }
+  });
 });
 
 // Sticker button handlers
@@ -229,14 +293,30 @@ document.addEventListener("click", (e) => {
   }
 });
 
-function sendSticker(sticker) {
+function sendSticker(sticker, type = "emoji") {
   if (!apiKey) {
     appendMessage("assistant", "isi openrouter api key dulu ya di .env", false);
     return;
   }
 
-  appendMessage("user", sticker, true, true);
-  analyzeContext(`[User sent sticker: ${sticker}]`);
+  if (type === "emoji") {
+    // Emoji sticker - same as before
+    appendMessage("user", sticker, true, true);
+    analyzeContext(`[User sent sticker: ${sticker}]`);
+  } else if (type === "custom") {
+    // Custom sticker - use special format for detection
+    const stickerMarker = `[CUSTOM_STICKER:${sticker.filename}:${sticker.meaning}]`;
+    appendMessage("user", stickerMarker, true, false);
+
+    // AI gets meaning for context understanding
+    const contextText = `[User sent custom sticker: "${sticker.meaning}"${
+      sticker.description ? ` (${sticker.description})` : ""
+    }]`;
+    analyzeContext(contextText);
+
+    console.log(`📨 Custom sticker sent: ${sticker.meaning}`);
+  }
+
   getMashaResponse();
 }
 
@@ -937,18 +1017,45 @@ function appendMessage(role, text, save = true, isSticker = false) {
 
   // Set main message content first (if no AI quote parsing)
   if (!hasAIQuote) {
-    const mainText = document.createElement("span");
-    mainText.textContent = cleanedText;
-    msgDiv.appendChild(mainText);
+    // Check if this is a custom sticker
+    const customStickerPattern = /^\[CUSTOM_STICKER:(.+?):(.+?)\]$/;
+    const match = cleanedText.match(customStickerPattern);
 
-    // Add reply quote BEFORE main text if this message is replying to another
-    if (save && replyingTo) {
-      const quotedDiv = document.createElement("div");
-      quotedDiv.className = "quoted-message";
-      quotedDiv.textContent = `↩ ${replyingTo.content.substring(0, 40)}${
-        replyingTo.content.length > 40 ? "..." : ""
-      }`;
-      msgDiv.insertBefore(quotedDiv, mainText);
+    if (match) {
+      // This is a custom sticker! Render as image
+      const filename = match[1];
+      const meaning = match[2];
+
+      msgDiv.classList.add("message-sticker");
+
+      const img = document.createElement("img");
+      img.src = `sticker/${filename}`;
+      img.alt = meaning;
+      img.title = meaning;
+      img.style.cssText =
+        "max-width: 150px; max-height: 150px; object-fit: contain;";
+
+      img.onerror = () => {
+        // If image fails, show meaning text
+        msgDiv.textContent = `[Sticker: ${meaning}]`;
+      };
+
+      msgDiv.appendChild(img);
+    } else {
+      // Regular text message
+      const mainText = document.createElement("span");
+      mainText.textContent = cleanedText;
+      msgDiv.appendChild(mainText);
+
+      // Add reply quote BEFORE main text if this message is replying to another
+      if (save && replyingTo) {
+        const quotedDiv = document.createElement("div");
+        quotedDiv.className = "quoted-message";
+        quotedDiv.textContent = `↩ ${replyingTo.content.substring(0, 40)}${
+          replyingTo.content.length > 40 ? "..." : ""
+        }`;
+        msgDiv.insertBefore(quotedDiv, mainText);
+      }
     }
   }
 

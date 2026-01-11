@@ -522,10 +522,50 @@ input {
   color: var(--primary);
 }
 
+/* Sticker Tabs (WhatsApp style) */
+.sticker-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.sticker-tab {
+  flex: 1;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #999;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.sticker-tab:hover {
+  color: #666;
+  background: #f8f9fa;
+}
+
+.sticker-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: transparent;
+}
+
 .sticker-grid {
-  display: grid;
+  display: none; /* Hidden by default */
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
+}
+
+.sticker-grid.active {
+  display: grid; /* Show active tab */
 }
 
 .sticker-item {
